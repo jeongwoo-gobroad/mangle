@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ function SignupPage() {
   const [school, setSchool] = useState("");
   const [grade, setGrade] = useState("");
   const [major, setMajor] = useState("");
+  const [role, setRole] = useState("");
   const [interests, setInterests] = useState([]);
 
   const interestOptions = [
@@ -34,10 +36,42 @@ function SignupPage() {
     }
   };
 
-  const handleRegister = () => {
+  const handleRegister =  async ()  => {
+    try {
+      // 전송할 회원가입 데이터
+      const signupData = {
+        email,
+        userId,
+        password,
+        name,
+        school,
+        grade: Number(grade), // 숫자로 변환
+        major,
+        role,
+        interests,
+      };
+      // ✅ 보내는 JSON 구조 확인 (개발자 도구 Console 탭에서 볼 수 있음)
+      console.log("🔥 프론트에서 서버로 보낼 데이터:", JSON.stringify(signupData, null, 2));
+
+      console.log("회원가입 요청 데이터:", signupData);
+
+      // 백엔드 POST 요청
+      const response = await axios.post("http://192.168.202.11:8080/auth/signup", signupData);
+
+      // 성공 응답 처리
+      console.log("회원가입 성공:", response.data);
+      alert("회원가입이 완료되었습니다!");
+      navigate("/signup-complete");
+    } catch (error) {
+      console.error("회원가입 실패:", error.response?.data || error.message);
+      alert("회원가입 실패: " + (error.response?.data?.message || "서버 오류"));
+    }
+
+    /*
     console.log("회원가입 시도:", {
       email, userId, password, name, school, grade, major, interests,
     });
+    */
 
     // =========================================================================
     // ✅ 여기에 실제 백엔드 회원가입 API 호출 로직을 추가해야 합니다.
@@ -62,9 +96,8 @@ function SignupPage() {
     // });
     // =========================================================================
 
-    // ✅ 임시로 API 호출 없이 바로 완료 페이지로 이동 (테스트용)
-    // 실제 백엔드 연동 시 위 주석 처리된 fetch 로직을 사용해야 합니다.
-    navigate("/signup-complete");
+
+    //navigate("/signup-complete");
   };
 
   return (
@@ -117,6 +150,13 @@ function SignupPage() {
           onChange={handleChange(setMajor)}
         />
 
+        <Input
+          type="text"
+          placeholder="역할"
+          value={role}
+          onChange={handleChange(setRole)}
+        />
+
         <InterestSection>
           <InterestTitle>관심 분야 선택</InterestTitle>
           <CheckboxGrid>
@@ -156,21 +196,19 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* padding-top: 60px; */ /* SignupPage도 LoginPage와 동일하게 하단 여백 이슈 해결 */
 `;
 
 const Header = styled.div`
   font-size: 24px;
   color: #948dce;
   font-weight: bold;
-  /* margin-bottom: 60px; */
   align-self: flex-start;
   margin-left: 30px;
   width: 100%;
   border-bottom: 1px solid white;
   padding-bottom: 5px;
   padding-left: 30px;
-  padding-top: 60px; /* Header 자체의 상단 여백 */
+  padding-top: 60px; 
 `;
 
 const RegisterBox = styled.div`
@@ -178,7 +216,7 @@ const RegisterBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 60px; /* Header와 RegisterBox 사이 간격 */
+  margin-top: 60px; 
 `;
 
 const Title = styled.h2`

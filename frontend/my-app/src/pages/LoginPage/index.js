@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-// import axios from "axios"; // axios 임포트 제거
+// import axios from "axios"; 
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -13,9 +13,9 @@ function LoginPage() {
     setter(e.target.value);
   };
 
-  const handleLogin = () => { // async 키워드 제거 (더 이상 비동기 작업 아님)
+  const handleLogin = () => {
     console.log("로그인 버튼 클릭됨 - 프로필 페이지로 즉시 이동");
-    // 백엔드 통신 없이 바로 프로필 페이지로 이동
+
     navigate("/profile");
   };
 

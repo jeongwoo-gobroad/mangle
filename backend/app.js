@@ -6,11 +6,21 @@ const HOST = process.env.HOST||'0.0.0.0';
 
 const express = require('express');
 const cors = require('cors');
+const path = require("path")
+const corsOptions = {
+  origin: '*', // 모든 origin 허용
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+
 const app = express();
+app.use(express.static(path.join(__dirname, "../frontend/build")));
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 const { sequelize } = require('./models');
-sequelize.sync({ alter: true });
+
+
 
 module.exports = {app};
 
@@ -29,6 +39,17 @@ app.use('/teamposts', teamPostRouter);
 const messageRouter = require('./api/message/messageRouter');
 app.use('/messages', messageRouter);
 
-app.listen(HTTP_PORT, HOST, () => {
-    console.log(`server is on http://${HOST}:${HTTP_PORT}`);
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
 });
+
+sequelize.sync({force: false})
+  .then(() => {
+    console.log("✅ DB synced");
+    app.listen(HTTP_PORT, () => {
+      console.log(`✅ server is on http://${HOST}:${HTTP_PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("❌ DB sync error:", err);
+  });

@@ -4,11 +4,19 @@ const { User } = require('../../models');
 
 const signup = async (req, res) => {
   try {
+    // 🔍 프론트에서 보낸 데이터 로그
+    console.log("📥 [signup] 요청 바디:", req.body);
     const { email, userId, password, name, school, grade, major, interests, role } = req.body;
-
+      // 🔍 필수 필드 체크 로그
+    if (!email || !userId || !password) {
+      console.warn("⚠️ [signup] 필수 필드 누락:", { email, userId, password });
+    }
     // 비밀번호 해싱
     const hashedPassword = await bcrypt.hash(password, 10);
-
+     // 🔍 User.create 전 데이터 확인
+    console.log("🛠 [signup] 저장할 사용자:", {
+      email, userId, hashedPassword, name, school, grade, major, interests, role
+    });
     // User 생성
     const newUser = await User.create({
       email,
@@ -21,6 +29,8 @@ const signup = async (req, res) => {
       interests,
       role, // 배열로 받은 것 → model에서 JSON으로 자동 처리
     });
+     // ✅ 성공 응답
+    console.log("✅ [signup] 회원가입 성공:", newUser.userId);
 
     res.status(201).json({
       message: '회원가입이 완료되었습니다.',
@@ -31,7 +41,8 @@ const signup = async (req, res) => {
       },
     });
   } catch (err) {
-    console.error('signup error:', err);
+    // ❌ 에러 출력
+    console.error('❌ [signup] 에러 발생:', err);
     res.status(500).json({ error: '회원가입 중 에러 발생' });
   }
 };
@@ -42,6 +53,8 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 const login = async (req, res) => {
   try {
     const { email, userId, password } = req.body;
+    // 🔍 프론트에서 보낸 로그인 정보
+    console.log("📥 [login] 요청 바디:", req.body);
 
     // 유저 존재 확인 (email + userId 조합으로 찾기)
     const user = await User.findOne({ where: { email, userId } });
@@ -66,6 +79,9 @@ const login = async (req, res) => {
       { expiresIn: '3h' } // 유효기간 3시간
     );
 
+      // ✅ 로그인 성공 로그
+    console.log("✅ [login] 로그인 성공:", user.userId);
+
     res.status(200).json({
       message: '로그인 성공',
       token,
@@ -75,7 +91,8 @@ const login = async (req, res) => {
       },
     });
   } catch (err) {
-    console.error('login error:', err);
+    // ❌ 로그인 에러
+    console.error('❌ [login] 에러 발생:', err);
     res.status(500).json({ error: '로그인 중 오류가 발생했습니다.' });
   }
 };

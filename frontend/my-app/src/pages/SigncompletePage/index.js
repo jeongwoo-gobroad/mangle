@@ -17,8 +17,7 @@ function SignupCompletePage() {
         <Title>회원가입 완료!</Title>
         <Subtitle>성공적으로 맹글 서비스에 가입되었습니다.</Subtitle>
         <CheckMark>
-          {/* ✅ 이모지 대신 이미지를 사용합니다. */}
-          <img src="/images/check.png" alt="완료 체크 표시" /> {/* ✅ 이미지 경로 수정 */}
+          <img src="/images/check.png" alt="완료 체크 표시" /> 
         </CheckMark>
         <Subtitle2>이제 로그인하여 서비스를 이용하실 수 있습니다.</Subtitle2>
         <LoginButton onClick={handleGoToLogin}>로그인 페이지로 이동</LoginButton>
@@ -79,19 +78,19 @@ const Subtitle = styled.p`
 `;
 
 const CheckMark = styled.div`
-  /* 기존 폰트 사이즈와 색상 속성은 이미지에는 적용되지 않습니다. */
+
   /* 이미지 크기를 조정하려면 img 태그에 직접 스타일을 적용하거나 CheckMark 내에서 img 태그를 스타일링합니다. */
   margin-bottom: 20px;
-  width: 70px; /* 이미지 너비 조정 (원하는 크기로 조절) */
-  height: 70px; /* 이미지 높이 조정 (원하는 크기로 조절) */
-  display: flex; /* 이미지를 중앙에 정렬하기 위해 flexbox 사용 */
+  width: 70px; 
+  height: 70px; 
+  display: flex; 
   justify-content: center;
   align-items: center;
 
   img {
-    width: 100%; /* 부모 CheckMark div의 크기에 맞춤 */
+    width: 100%;
     height: 100%;
-    object-fit: contain; /* 이미지 비율 유지 */
+    object-fit: contain; 
   }
 `;
 const Subtitle2 = styled.p`
