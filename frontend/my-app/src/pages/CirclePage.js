@@ -69,7 +69,7 @@ const searchedProjects = [
   }
 ];
 
-const App = () => {
+const CirclePage= () => {
   const [query, setQuery] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
 

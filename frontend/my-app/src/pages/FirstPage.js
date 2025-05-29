@@ -3,7 +3,7 @@ import { Div, Text, Image, ThemeProvider } from "atomize";
 import { FiSearch, FiGrid, FiMenu } from "react-icons/fi";
 import { AiFillCheckCircle } from "react-icons/ai";
 
-function App() {
+function FirstPage() {
   const [cardData, setCardData] = useState([]);
 
   useEffect(() => {
@@ -139,4 +139,4 @@ function App() {
   );
 }
 
-export default App;
+export default FirstPage;
