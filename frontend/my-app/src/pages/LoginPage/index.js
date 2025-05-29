@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-// import axios from "axios"; 
+import axios from "axios"; // ✅ 로그인 요청을 위해 axios 추가
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -13,10 +13,30 @@ function LoginPage() {
     setter(e.target.value);
   };
 
-  const handleLogin = () => {
-    console.log("로그인 버튼 클릭됨 - 프로필 페이지로 즉시 이동");
+  // ✅ 로그인 버튼 눌렀을 때 실행
+  const handleLogin = async () => {
+    try {
+      // 📨 로그인 API 호출
+      const response = await axios.post("http://1.214.110.53:8080/auth/login", {
+        email,
+        userId: email.split("@")[0], // ✅ 백엔드에 userId도 필요하므로 임시로 만듦
+        password,
+      });
 
-    navigate("/profile");
+      // ✅ 응답에서 token, user 정보 받기
+      const { token, user } = response.data;
+
+      // ✅ localStorage에 저장해서 나중에 인증 요청할 때 씀
+      localStorage.setItem("token", token);
+      localStorage.setItem("userId", user.userId);
+      localStorage.setItem("userName", user.name);
+
+      // ✅ 로그인 성공 후 프로필 페이지로 이동
+      navigate("/profile");
+    } catch (error) {
+      console.error("로그인 실패:", error);
+      alert("로그인 실패! 이메일/비밀번호를 확인해주세요.");
+    }
   };
 
   return (
@@ -56,7 +76,7 @@ function LoginPage() {
 
 export default LoginPage;
 
-
+// ✅ styled-components (UI는 그대로 유지)
 const Container = styled.div`
   background-color: black;
   color: white;
@@ -114,7 +134,7 @@ const Input = styled.input`
 `;
 
 const LoginButton = styled.button`
-  width: 420px; /* 이전에 400px였는데 스크린샷 기준으로 조정 */
+  width: 420px;
   padding: 12px;
   border-radius: 6px;
   background-color: #948dce;
@@ -122,7 +142,6 @@ const LoginButton = styled.button`
   font-weight: bold;
   border: none;
   margin-bottom: 24px;
-  display: block;
   cursor: pointer;
 `;
 
@@ -142,7 +161,7 @@ const Divider = styled.div`
 `;
 
 const SignupButton = styled.button`
-  width: 420px; 
+  width: 420px;
   padding: 12px;
   border-radius: 6px;
   background-color: transparent;
@@ -158,8 +177,8 @@ const RememberMe = styled.div`
   align-items: center;
   font-size: 14px;
   color: #aaa;
-  width: 400px; /* LoginBox의 width와 맞춰주어 정렬 문제 해결 */
-  justify-content:center; /* 왼쪽 정렬 */
+  width: 400px;
+  justify-content: center;
 
   input[type="checkbox"] {
     margin-right: 8px;
@@ -179,13 +198,12 @@ const RememberMe = styled.div`
   }
 
   input[type="checkbox"]:checked::after {
-    content: '✔';
+    content: "✔";
     color: black;
     font-size: 12px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    
   }
 `;

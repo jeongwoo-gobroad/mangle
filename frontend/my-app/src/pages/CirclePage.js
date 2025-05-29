@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FiMenu,
   FiArrowLeft,
@@ -14,68 +14,72 @@ const initialProjects = [
     title: "TasteAI",
     description: "AI를 이용해 사용자 선호도를 분석하고 레스토랑을 추천해주는 앱",
     image: "res.png",
-    similarity: "89%"
+    similarity: null
   },
   {
     title: "FlavorFinder",
     description: "GPT 기반 리뷰 분석으로 식당 트렌드를 예측하는 머신러닝 프로젝트",
     image: "trend.png",
-    similarity: "83%"
+    similarity: null
   },
   {
     title: "StudySync",
     description: "학생들의 학습 데이터를 분석해 개인 맞춤형 공부 루틴을 추천하는 AI 서비스",
     image: "study.png",
-    similarity: "78%"
+    similarity: null
   },
   {
     title: "EcoTrack",
     description: "탄소 배출량을 분석하고 절감 아이디어를 추천하는 지속가능성 분석 플랫폼",
     image: "carbon.png",
-    similarity: "74%"
+    similarity: null
   },
   {
     title: "JobMatchAI",
     description: "이력서와 경력 기반으로 최적의 채용 공고를 매칭해주는 AI 기반 구직 플랫폼",
     image: "work.png",
-    similarity: "74%"
+    similarity: null
   }
 ];
 
-const searchedProjects = [
-  {
-    title: "Project Silver",
-    description: "Description for Project Silver",
-    image: "silver.png",
-    similarity: "87%"
-  },
-  {
-    title: "Project Gold",
-    description: "Description for Project Gold",
-    image: "gold.png",
-    similarity: "67%"
-  },
-  {
-    title: "Project Vision",
-    description: "Vision tracking for robotics and automation",
-    image: "project.png",
-    similarity: "74%"
-  },
-  {
-    title: "DocAnalyzer",
-    description: "문서 자동 분석 및 보고서 요약 AI 시스템",
-    image: "document.png",
-    similarity: "88%"
-  }
-];
-
-const CirclePage= () => {
+const CirclePage = () => {
   const [query, setQuery] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
+  const [searchedProjects, setSearchedProjects] = useState([]);
 
   const searched = submittedQuery !== "";
   const projectsToShow = searched ? searchedProjects : initialProjects;
   const sectionTitle = searched ? "기존에 이런게 있었어요" : "이런 프로젝트에 참가해보세요";
+
+  // 유사도 검색 API 호출
+  useEffect(() => {
+    if (!submittedQuery) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("로그인이 필요합니다.");
+      return;
+    }
+
+    fetch("http://1.214.110.53:8080/contests/similarity", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ content: submittedQuery })
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("유사도 검색 실패");
+        return res.json();
+      })
+      .then((data) => {
+        setSearchedProjects(data); // 백엔드에서 유사 프로젝트 리스트 반환
+      })
+      .catch((err) => {
+        console.error("API 호출 오류:", err);
+      });
+  }, [submittedQuery]);
 
   const handleSubmit = (e) => {
     if (e.key === "Enter") {
@@ -86,6 +90,7 @@ const CirclePage= () => {
   const handleBack = () => {
     setQuery("");
     setSubmittedQuery("");
+    setSearchedProjects([]);
   };
 
   return (
@@ -208,16 +213,18 @@ const CirclePage= () => {
             <div style={{ marginLeft: "1rem", flex: 1 }}>
               <div style={{ fontWeight: "bold" }}>{proj.title}</div>
               <div style={{ fontSize: "0.85rem", color: "#ccc" }}>{proj.description}</div>
-              <div style={{
-                marginTop: "0.5rem",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                fontSize: "0.85rem"
-              }}>
-                <FiPlus size={14} />
-                {searched && <>유사도 · {proj.similarity}</>}
-              </div>
+              {searched && proj.similarity && (
+                <div style={{
+                  marginTop: "0.5rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  fontSize: "0.85rem"
+                }}>
+                  <FiPlus size={14} />
+                  유사도 · {proj.similarity}
+                </div>
+              )}
             </div>
             <FiChevronRight size={20} />
           </div>

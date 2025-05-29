@@ -5,30 +5,35 @@ import { AiFillCheckCircle } from "react-icons/ai";
 
 function FirstPage() {
   const [cardData, setCardData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      console.error("No token found, 로그인 필요");
+      setError("로그인이 필요합니다.");
+      setLoading(false);
       return;
     }
 
     fetch("http://1.214.110.53:8080/contests/recommend", {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch contests");
         return res.json();
       })
       .then((data) => {
-        setCardData(data); // 서버에서 온 contest 배열
+        setCardData(data);
       })
       .catch((err) => {
         console.error("API 호출 실패:", err);
-      });
+        setError("콘테스트 불러오기 실패");
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -102,11 +107,26 @@ function FirstPage() {
           </Div>
         </Div>
 
-        {/* 카드 목록 */}
+        {/* 콘텐츠 영역 */}
         <Div px="1rem" py="1rem">
           <Text tag="h2" textColor="white" textSize="heading" m={{ b: "1rem" }}>
             Upcoming Contests
           </Text>
+
+          {/* 로딩, 에러, 빈 목록 처리 */}
+          {loading && (
+            <Text textColor="gray300" textAlign="center">로딩 중...</Text>
+          )}
+
+          {error && (
+            <Text textColor="red500" textAlign="center">{error}</Text>
+          )}
+
+          {!loading && !error && cardData.length === 0 && (
+            <Text textColor="gray300" textAlign="center">추천 콘테스트가 없습니다.</Text>
+          )}
+
+          {/* 카드 리스트 */}
           <Div d="flex" flexWrap="wrap" justify="space-between">
             {cardData.map((card, index) => (
               <Div
@@ -118,7 +138,7 @@ function FirstPage() {
                 overflow="hidden"
               >
                 <Image
-                  src={card.image || "/default.jpg"} // 백엔드에 이미지 없을 경우 대비
+                  src={card.image || "/default.jpg"}
                   w="100%"
                   h="180px"
                   objectFit="cover"
