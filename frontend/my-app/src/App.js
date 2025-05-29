@@ -5,7 +5,8 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import SigncompletePage from "./pages/SigncompletePage"; // Import corrected to match actual component name
 import ProfilePage from "./pages/ProfilePage"; // ProfilePage 임포트
-import CirclePage from "./pages/CirclePage"
+import CirclePage from "./pages/CirclePage";
+import FirstPage from "./pages/FirstPage";
 import './App.css'; // 기본 CSS 파일 (선택 사항, 필요 없으면 제거 가능)
 
 function App() {
