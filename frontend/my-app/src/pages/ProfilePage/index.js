@@ -1,23 +1,18 @@
+//src/pages/ProfilePage/index.js
 import React, { useState } from "react";
 import styled from "styled-components";
 
-// HexagonGraph component
+// HexagonGraph component (변동 없음)
 const HexagonGraph = ({ capabilities, values }) => {
-    const size = 100; // 육각형의 반지름
-    // SVG 영역 확보 및 글자 잘림 방지를 위해 중심 좌표를 더 여유 있게 설정
-    // 이전 padding(60)에서 텍스트 길이를 고려하여 더 늘립니다.
-    const padding = 70; // 추가적인 패딩 (글자가 최대로 튀어나올 공간)
+    const size = 70;
+    const padding = 100;
     const centerX = size + padding;
     const centerY = size + padding;
     const numSides = capabilities.length;
 
-    // 핵심 수정: 상단(프론트엔드)을 기준으로 각도 오프셋 설정
-    // SVG에서 0라디안은 오른쪽 (+X축)을 가리키므로,
-    // 육각형의 꼭지점 하나를 정확히 상단(-Y축)에 두려면 -Math.PI / 2 (-90도)를 더합니다.
     const angleOffset = -Math.PI / 2;
-    const angleIncrement = (Math.PI * 2) / numSides; // 각 능력치 간의 각도 간격
+    const angleIncrement = (Math.PI * 2) / numSides;
 
-    // 육각형 외곽선 포인트 계산
     const hexagonPoints = capabilities
         .map((_, i) => {
             const angle = i * angleIncrement + angleOffset;
@@ -27,19 +22,16 @@ const HexagonGraph = ({ capabilities, values }) => {
         })
         .join(" ");
 
-    // 능력치 데이터 포인트 계산 (채워진 영역)
     const capabilityPoints = values
         .map((value, i) => {
             const angle = i * angleIncrement + angleOffset;
-            const scaledValue = (value / 100) * size; // 0-100% 값을 0-size로 변환
+            const scaledValue = (value / 100) * size;
             const x = centerX + scaledValue * Math.cos(angle);
             const y = centerY + scaledValue * Math.sin(angle);
             return `${x},${y}`;
         })
         .join(" ");
 
-    // SVG의 최종 너비와 높이. padding을 양쪽에 적용하여 충분한 공간 확보
-    // 텍스트가 길고 폰트가 두껍다면 이 값을 더 늘릴 필요가 있습니다.
     const svgWidth = size * 2 + padding * 2;
     const svgHeight = size * 2 + padding * 2;
 
@@ -47,17 +39,14 @@ const HexagonGraph = ({ capabilities, values }) => {
         <GraphContainer>
             <svg width={svgWidth} height={svgHeight} viewBox={`0 0 ${svgWidth} ${svgHeight}`}>
                 <g>
-                    {/* 육각형 외곽선 */}
                     <polygon points={hexagonPoints} fill="none" stroke="#666" strokeWidth="1" />
-
-                    {/* 축 라인 */}
                     {capabilities.map((_, i) => {
                         const angle = i * angleIncrement + angleOffset;
                         const x = centerX + size * Math.cos(angle);
                         const y = centerY + size * Math.sin(angle);
                         return (
                             <line
-                                key={i}
+                                key={`axis-${i}`}
                                 x1={centerX}
                                 y1={centerY}
                                 x2={x}
@@ -67,55 +56,49 @@ const HexagonGraph = ({ capabilities, values }) => {
                             />
                         );
                     })}
-
-                    {/* 채워진 능력치 영역 */}
                     <polygon points={capabilityPoints} fill="#948dce" fillOpacity="0.7" />
-
-                    {/* 능력치 레이블 */}
                     {capabilities.map((capability, i) => {
                         const angle = i * angleIncrement + angleOffset;
-                        const labelOffset = 40; // 텍스트를 육각형 테두리에서 더 멀리 떨어뜨림 (이전 35에서 증가)
+                        const labelOffset = 20;
                         const x = centerX + (size + labelOffset) * Math.cos(angle);
                         const y = centerY + (size + labelOffset) * Math.sin(angle);
 
-                        let textAnchor = "middle"; // 기본값은 중앙 정렬
-                        let dyOffset = 0; // 추가적인 수직 오프셋
-                        let dxOffset = 0; // 추가적인 수평 오프셋
+                        let textAnchor = "middle";
+                        let dyOffset = 0;
+                        let dxOffset = 0;
 
-                        // 각 레이블의 위치 및 정렬 미세 조정
-                        // '환경 문제 해결'과 '사회 문제 해결'처럼 긴 텍스트를 고려하여 조정
-                        if (i === 0) { // 프론트엔드 (Top)
-                            dyOffset = -8; // 위로 약간 더 올림
-                        } else if (i === 1) { // 백엔드 (Top-Right)
-                            textAnchor = "start"; // 오른쪽 정렬
-                            dxOffset = 10; // 오른쪽으로 더 이동
-                            dyOffset = 2; // 아래로 약간 이동
-                        } else if (i === 2) { // 디자인 (Bottom-Right)
+                        if (i === 0) {
+                            dyOffset = -5;
+                        } else if (i === 1) {
                             textAnchor = "start";
-                            dxOffset = 10;
-                            dyOffset = 15; // 아래로 더 이동
-                        } else if (i === 3) { // 환경 문제 해결 (Bottom)
-                            dyOffset = 20; // 아래로 더 이동 (긴 글자)
-                        } else if (i === 4) { // 사회 문제 해결 (Bottom-Left)
-                            textAnchor = "end"; // 왼쪽 정렬
-                            dxOffset = -10; // 왼쪽으로 더 이동
-                            dyOffset = 15; // 아래로 더 이동 (긴 글자)
-                        } else if (i === 5) { // 경영 (Top-Left)
+                            dxOffset = 5;
+                            dyOffset = 2;
+                        } else if (i === 2) {
+                            textAnchor = "start";
+                            dxOffset = 5;
+                            dyOffset = 8;
+                        } else if (i === 3) {
+                            dyOffset = 12;
+                        } else if (i === 4) {
                             textAnchor = "end";
-                            dxOffset = -10;
+                            dxOffset = 5;
+                            dyOffset = 8;
+                        } else if (i === 5) {
+                            textAnchor = "end";
+                            dxOffset = -5;
                             dyOffset = 2;
                         }
 
                         return (
                             <text
-                                key={i}
+                                key={`label-${i}`}
                                 x={x + dxOffset}
                                 y={y + dyOffset}
                                 fill="white"
-                                fontSize="16px"
-                                fontWeight="bold" // 폰트가 더 두꺼울 경우 공간이 더 필요할 수 있습니다.
+                                fontSize="13px"
+                                fontWeight="bold"
                                 textAnchor={textAnchor}
-                                fontFamily="AppleSDGothicNeo-Regular, 'Noto Sans KR', sans-serif" // 폰트 확인
+                                fontFamily="AppleSDGothicNeo-Regular, 'Noto Sans KR', sans-serif"
                             >
                                 {capability}
                             </text>
@@ -127,10 +110,8 @@ const HexagonGraph = ({ capabilities, values }) => {
     );
 };
 
-// ProfilePage 컴포넌트는 그대로 유지됩니다.
+// ProfilePage 컴포넌트
 function ProfilePage() {
-    // useState 훅이 제대로 import 되어 있는지 확인하세요.
-    // import React, { useState } from "react"; 이 코드 줄이 ProfilePage 컴포넌트 파일 상단에 있어야 합니다.
     const [username, setUsername] = useState("");
     const [emailNotifications, setEmailNotifications] = useState(true);
     const [smsAlerts, setSmsAlerts] = useState(false);
@@ -164,7 +145,6 @@ function ProfilePage() {
         alert("변경 사항이 취소되었습니다.");
     };
 
-    // 능력치 순서는 이미지와 동일하게 (상단부터 시계 방향)
     const capabilities = [
         "프론트엔드",
         "백엔드",
@@ -174,19 +154,26 @@ function ProfilePage() {
         "경영",
     ];
 
-    // 능력치 값 (순서 일치)
     const capabilityValues = [
-        70, // 프론트엔드
-        90, // 백엔드
-        60, // 디자인
-        50, // 환경 문제 해결
-        80, // 사회 문제 해결
-        75, // 경영
+        70, 90, 60, 50, 60, 75,
     ];
 
     return (
         <Container>
-            <Header>＊ 맹글</Header>
+            <Header>
+                <HeaderLeft> {/* 햄버거 메뉴와 맹글을 묶기 위한 새로운 Wrapper */}
+                    <HamburgerMenu>
+                        <Line />
+                        <Line />
+                        <Line />
+                    </HamburgerMenu>
+                    <HeaderTitle>
+                        ＊ 맹글
+                    </HeaderTitle>
+                </HeaderLeft>
+                {/* 프로필 이미지가 검정 화면 안에 완전히 들어오게 하기 위해 margin-right와 width, height를 확인하세요. */}
+                <ProfileImage src="/images/profile.png" alt="프로필 이미지" /> {/* 실제 프로필 이미지 경로로 변경하세요 */}
+            </Header>
             <ContentArea>
                 <PageTitle>Profile Settings</PageTitle>
 
@@ -206,7 +193,6 @@ function ProfilePage() {
                     </InputWrapper>
                 </Section>
 
-                {/* Hexagon Graph 섹션 */}
                 <Section>
                     <SectionTitle>Capabilities</SectionTitle>
                     <HexagonGraph capabilities={capabilities} values={capabilityValues} />
@@ -319,13 +305,21 @@ function ProfilePage() {
                     <CancelButton onClick={handleCancel}>Cancel</CancelButton>
                 </ButtonContainer>
             </ContentArea>
+
+            {/* Bottom Navigation Bar Added */}
+            <BottomNavBar>
+                <NavBarIcon src="/images/home.png" alt="Home" />
+                <NavBarIcon src="/images/circle.png" alt="Circle" />
+                <NavBarIcon src="/images/link.png" alt="Link" />
+                <NavBarIcon2 src="/images/profileicon.png" alt="Profile" />
+            </BottomNavBar>
         </Container>
     );
 }
 
 export default ProfilePage;
 
-// Styled-components는 이전과 동일합니다.
+// Styled-components
 const Container = styled.div`
     background-color: black;
     color: white;
@@ -333,28 +327,83 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-bottom: 50px;
+    /* Adjust padding-bottom to account for the fixed bottom nav bar */
+    padding-bottom: 60px; /* Height of the BottomNavBar */
+    position: relative; /* Needed for z-index of fixed elements to work relative to content */
 `;
 
 const Header = styled.div`
     font-size: 24px;
     color: #948dce;
     font-weight: bold;
-    align-self: flex-start;
-    margin-left: 30px;
     width: 100%;
     border-bottom: 1px solid #333;
     padding-bottom: 5px;
-    padding-left: 30px;
+    padding-left: 30px; /* 왼쪽 패딩 */
     padding-top: 60px;
+    padding-right: 30px; /* 오른쪽 패딩 */
     margin-bottom: 0px;
+    display: flex; /* 내부 요소들을 한 줄에 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: space-between; /* 양 끝 정렬 */
 `;
+
+// 햄버거 메뉴와 맹글을 묶기 위한 새로운 Wrapper
+const HeaderLeft = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 15px; /* 햄버거 메뉴와 맹글 텍스트 사이 간격 */
+`;
+
+const HamburgerMenu = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 25px;
+    height: 20px;
+    cursor: pointer;
+    padding: 2px;
+    padding-left: 15px;
+`;
+
+const Line = styled.div`
+    width: 100%;
+    height: 2px;
+    background-color: white;
+`;
+
+const HeaderTitle = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 로고와 맹글 텍스트 사이 간격 */
+    font-size: 24px;
+    color: #948dce;
+    font-weight: bold;
+    margin-bottom: 7px; 
+`;
+
+
+const ProfileImage = styled.img`
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #948dce;
+    /* Header의 padding-right와 조화롭게 작동하도록 margin-right를 조절 */
+    margin-right: 15px; /* Negative margin to pull it left */
+    cursor: pointer;
+    margin-bottom: 7px; 
+`;
+
 
 const ContentArea = styled.div`
     width: 800px;
     max-width: 90%;
     margin-top: 0px;
     padding: 20px;
+    /* Enable scrolling for content, but exclude the bottom nav bar */
+    overflow-y: auto;
+    flex-grow: 1; /* Allow content to take up available space */
 `;
 
 const PageTitle = styled.h1`
@@ -369,6 +418,11 @@ const Section = styled.div`
     margin-bottom: 40px;
     padding-bottom: 20px;
     border-bottom: 1px solid #333;
+    &:last-of-type {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
 `;
 
 const SectionTitle = styled.h2`
@@ -389,7 +443,7 @@ const StyledProfileImage = styled.img`
     height: 60px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #6b72e2;
+    border: 2px solid #948dce;
 `;
 
 const StyledLinkIcon = styled.img`
@@ -570,4 +624,46 @@ const GraphContainer = styled.div`
     align-items: center;
     margin-top: 20px;
     margin-bottom: 40px;
+    padding-left: 20px;
+`;
+
+// New Styled Components for Bottom Navigation Bar
+const BottomNavBar = styled.div`
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px; /* Height of the navigation bar */
+    background-color: #1a1a1a; /* Dark background as seen in the image */
+    border-top: 1px solid #333; /* Subtle top border */
+    display: flex;
+    justify-content: space-around; /* Distributes icons evenly */
+    align-items: center;
+    z-index: 1000; /* Ensure it stays on top */
+    padding-bottom: env(safe-area-inset-bottom); /* For iPhone X and newer */
+`;
+
+const NavBarIcon = styled.img`
+    width: 50px; /* Size of the icons */
+    height: 50px;
+    cursor: pointer;
+    filter: invert(1); /* Inverts color to make black icons white on dark background */
+    opacity: 0.7; /* Slightly faded */
+
+    &:hover {
+        opacity: 1; /* Full opacity on hover */
+    }
+`;
+
+const NavBarIcon2 = styled.img`
+    width: 65px; /* Size of the icons */
+    height: 65px;
+    margin-top: 10px; 
+    cursor: pointer;
+    filter: invert(1); /* Inverts color to make black icons white on dark background */
+    opacity: 0.7; /* Slightly faded */
+
+    &:hover {
+        opacity: 1; /* Full opacity on hover */
+    }
 `;
