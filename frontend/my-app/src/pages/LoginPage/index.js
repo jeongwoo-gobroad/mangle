@@ -6,40 +6,33 @@ import axios from "axios";
 function LoginPage() {
   const navigate = useNavigate();
 
-
+  // 상태 선언 순서는 가독성을 위해 유지
   const [userId, setUserId] = useState(""); 
   const [email, setEmail] = useState(""); 
-  const [name, setName] = useState("");   
-
+  const [password, setPassword] = useState(""); 
 
   const handleChange = (setter) => (e) => {
     setter(e.target.value);
   };
 
-
   const handleLogin = async () => {
     try {
-
       const response = await axios.post("http://jeongwoo-kim-web.myds.me:8080/auth/login", {
-        userId, 
-        email,  
-        name,   
-
+        userId,   
+        email,    
+        password, 
       });
 
-      // ✅ 응답에서 token, user 정보 받기
       const { token, user } = response.data;
 
-      // ✅ localStorage에 저장해서 나중에 인증 요청할 때 씀
       localStorage.setItem("token", token);
       localStorage.setItem("userId", user.userId);
       localStorage.setItem("userName", user.name);
 
-      // ✅ 로그인 성공 후 프로필 페이지로 이동
       navigate("/first");
     } catch (error) {
       console.error("로그인 실패:", error);
-      alert("로그인 실패! 정보를 확인해주세요."); 
+      alert("로그인 실패! 아이디/이메일 또는 비밀번호를 확인해주세요."); 
     }
   };
 
@@ -50,14 +43,7 @@ function LoginPage() {
         <Title>로그인</Title>
         <Subtitle>계정에 로그인하여 계속하세요.</Subtitle>
 
-
-        <Input
-          type="text"
-          placeholder="아이디"
-          value={userId}
-          onChange={handleChange(setUserId)}
-        />
-
+        {/* ✅ 순서 1: 이메일 입력 칸 */}
         <Input
           type="email"
           placeholder="이메일 주소"
@@ -65,16 +51,23 @@ function LoginPage() {
           onChange={handleChange(setEmail)}
         />
 
+        {/* ✅ 순서 2: 아이디 입력 칸 */}
         <Input
           type="text"
-          placeholder="이름"
-          value={name}
-          onChange={handleChange(setName)}
+          placeholder="아이디"
+          value={userId}
+          onChange={handleChange(setUserId)}
         />
 
+        {/* ✅ 순서 3: 비밀번호 입력 칸 */}
+        <Input
+          type="password"
+          placeholder="비밀번호"
+          value={password}
+          onChange={handleChange(setPassword)}
+        />
 
         <LoginButton onClick={handleLogin}>로그인</LoginButton>
-
 
         <Divider><span>or continue with</span></Divider> 
 
@@ -91,8 +84,7 @@ function LoginPage() {
 
 export default LoginPage;
 
-
-
+// styled-components 부분은 변경 없이 유지됩니다.
 const Container = styled.div`
   background-color: black;
   color: white;
