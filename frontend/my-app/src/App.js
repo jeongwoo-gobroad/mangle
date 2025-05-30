@@ -1,23 +1,34 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// 경로를 폴더까지만 지정하면 해당 폴더 안의 index.js를 자동으로 불러옵니다.
+
+// 기존 페이지들
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
-import SigncompletePage from "./pages/SigncompletePage"; // Import corrected to match actual component name
-import ProfilePage from "./pages/ProfilePage"; // ProfilePage 임포트
+import SigncompletePage from "./pages/SigncompletePage";
+import ProfilePage from "./pages/ProfilePage";
+
+// 새로 추가된 페이지들
 import CirclePage from "./pages/CirclePage";
 import FirstPage from "./pages/FirstPage";
-import './App.css'; // 기본 CSS 파일 (선택 사항, 필요 없으면 제거 가능)
+import PostingPage from "./pages/PostingPage";
+
+import './App.css'; // 전역 스타일 (필요시 유지)
 
 function App() {
   return (
     <Router>
       <Routes>
+        {/* 기본 로그인 관련 경로 */}
         <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} /> {/* 경로를 /signup으로 유지 */}
+        <Route path="/signup" element={<SignupPage />} />
         <Route path="/signup-complete" element={<SigncompletePage />} />
         <Route path="/profile" element={<ProfilePage />} />
+
+        {/* 새 페이지들 */}
+        <Route path="/circle" element={<CirclePage />} />
+        <Route path="/posting" element={<PostingPage />} />
+        <Route path="/first" element={<FirstPage />} />
       </Routes>
     </Router>
   );

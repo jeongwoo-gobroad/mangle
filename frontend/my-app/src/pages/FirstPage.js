@@ -3,6 +3,9 @@ import { Div, Text, Image, ThemeProvider } from "atomize";
 import { FiSearch, FiGrid, FiMenu } from "react-icons/fi";
 import { AiFillCheckCircle } from "react-icons/ai";
 
+// ✅ base URL 상수로 분리
+const BASE_URL = "http://jeongwoo-kim-web.myds.me:8080";
+
 function FirstPage() {
   const [cardData, setCardData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +20,7 @@ function FirstPage() {
       return;
     }
 
-    fetch("http://1.214.110.53:8080/contests/recommend", {
+    fetch(`${BASE_URL}/contests/recommend`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

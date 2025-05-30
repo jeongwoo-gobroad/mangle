@@ -11,17 +11,17 @@ import {
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 
-function App() {
+function PostingPage() {
   const navigate = useNavigate();
 
-  // 상태 정의
   const [title, setTitle] = useState("AI 파인튜닝 기반 맛집 추천 시스템");
-  const [content, setContent] = useState("사용자의 맛집 취향 데이터를 수집하고, 해당 데이터를 기반으로 GPT 모델을 파인튜닝하여 개인 맞춤형 맛집을 추천하는 시스템입니다.");
+  const [content, setContent] = useState(
+    "사용자의 맛집 취향 데이터를 수집하고, 해당 데이터를 기반으로 GPT 모델을 파인튜닝하여 개인 맞춤형 맛집을 추천하는 시스템입니다."
+  );
   const [titleClicked, setTitleClicked] = useState(false);
   const [contentClicked, setContentClicked] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // 초기화 핸들러
   const handleClearTitle = () => setTitle("");
   const handleClearContent = () => setContent("");
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
@@ -48,7 +48,7 @@ function App() {
       {/* 구분선 */}
       <div className="divider" />
 
-      {/* 프로젝트 시작하기 헤더 */}
+      {/* 헤더 */}
       <div
         style={{
           backgroundColor: "black",
@@ -67,7 +67,7 @@ function App() {
             size={20}
             color="white"
             style={{ cursor: "pointer" }}
-            onClick={() => navigate(-1)}
+            onClick={() => navigate(-1)} // ← 뒤로 가기
           />
           <span
             style={{
@@ -97,7 +97,7 @@ function App() {
         </div>
       </div>
 
-      {/* 제목 입력 박스 */}
+      {/* 제목 입력 */}
       <div style={{ padding: "1rem" }}>
         <div
           style={{
@@ -144,7 +144,7 @@ function App() {
         </p>
       </div>
 
-      {/* 내용 입력 박스 */}
+      {/* 내용 입력 */}
       <div style={{ padding: "1rem" }}>
         <div
           style={{
@@ -157,7 +157,11 @@ function App() {
         >
           <label style={{ color: "#333", fontSize: "0.875rem" }}>내용</label>
           <textarea
-            value={contentClicked ? content : "사용자의 맛집 취향 데이터를 수집하고, 해당 데이터를 기반으로 GPT 모델을 파인튜닝하여 개인 맞춤형 맛집을 추천하는 시스템입니다."}
+            value={
+              contentClicked
+                ? content
+                : "사용자의 맛집 취향 데이터를 수집하고, 해당 데이터를 기반으로 GPT 모델을 파인튜닝하여 개인 맞춤형 맛집을 추천하는 시스템입니다."
+            }
             onFocus={() => {
               if (!contentClicked) {
                 setContentClicked(true);
@@ -194,7 +198,7 @@ function App() {
         </p>
       </div>
 
-      {/* 제출 버튼 + 드롭다운 */}
+      {/* 제출 버튼 */}
       <div
         style={{
           display: "flex",
@@ -279,4 +283,4 @@ function App() {
   );
 }
 
-export default App;
+export default PostingPage;
