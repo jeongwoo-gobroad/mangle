@@ -10,25 +10,27 @@ import ProfilePage from "./pages/ProfilePage";
 // 새로 추가된 페이지들
 import CirclePage from "./pages/CirclePage";
 import FirstPage from "./pages/FirstPage";
-import PostingPage from "./pages/PostingPage";
+import PostingPage from "./pages/posting"
+import ChatPage from "./pages/ChatPage"; // ✅ 채팅 페이지 추가
 
-import './App.css'; // 전역 스타일 (필요시 유지)
+import "./App.css"; // 전역 스타일
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* 기본 로그인 관련 경로 */}
+        {/* 로그인 관련 경로 */}
         <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/signup-complete" element={<SigncompletePage />} />
         <Route path="/profile" element={<ProfilePage />} />
 
-        {/* 새 페이지들 */}
+        {/* 주요 기능 페이지 */}
         <Route path="/circle" element={<CirclePage />} />
         <Route path="/posting" element={<PostingPage />} />
         <Route path="/first" element={<FirstPage />} />
+        <Route path="/chat" element={<ChatPage />} /> {/* ✅ 새로 추가 */}
       </Routes>
     </Router>
   );
