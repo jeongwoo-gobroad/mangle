@@ -11,7 +11,7 @@ import ProfilePage from "./pages/ProfilePage";
 import CirclePage from "./pages/CirclePage";
 import FirstPage from "./pages/FirstPage";
 import PostingPage from "./pages/posting"
-import ChatPage from "./pages/ChatPage"; // ✅ 채팅 페이지 추가
+import ChatPage from "./pages/ChatPage";
 
 import "./App.css"; // 전역 스타일
 
