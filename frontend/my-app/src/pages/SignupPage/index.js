@@ -69,7 +69,7 @@ function SignupPage() {
       console.log("회원가입 요청 데이터:", signupData);
 
       // 백엔드 POST 요청
-      const response = await axios.post("http://192.168.202.11:8080/auth/signup", signupData);
+      const response = await axios.post("jeongwoo-kim-web.myds.me:8080/auth/signup", signupData);
 
       // 성공 응답 처리
       console.log("회원가입 성공:", response.data);
