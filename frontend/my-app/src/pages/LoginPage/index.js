@@ -1,26 +1,30 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; // ✅ 로그인 요청을 위해 axios 추가
+import axios from "axios"; 
 
 function LoginPage() {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
+  const [userId, setUserId] = useState(""); 
+  const [email, setEmail] = useState(""); 
+  const [name, setName] = useState("");   
+
 
   const handleChange = (setter) => (e) => {
     setter(e.target.value);
   };
 
-  // ✅ 로그인 버튼 눌렀을 때 실행
+
   const handleLogin = async () => {
     try {
-      // 📨 로그인 API 호출
-      const response = await axios.post("http://1.214.110.53:8080/auth/login", {
-        email,
-        userId: email.split("@")[0], // ✅ 백엔드에 userId도 필요하므로 임시로 만듦
-        password,
+
+      const response = await axios.post("http://127.0.0.1:8080/auth/login", {
+        userId, 
+        email,  
+        name,   
+
       });
 
       // ✅ 응답에서 token, user 정보 받기
@@ -32,10 +36,10 @@ function LoginPage() {
       localStorage.setItem("userName", user.name);
 
       // ✅ 로그인 성공 후 프로필 페이지로 이동
-      navigate("/profile");
+      navigate("/first");
     } catch (error) {
       console.error("로그인 실패:", error);
-      alert("로그인 실패! 이메일/비밀번호를 확인해주세요.");
+      alert("로그인 실패! 정보를 확인해주세요."); 
     }
   };
 
@@ -46,22 +50,33 @@ function LoginPage() {
         <Title>로그인</Title>
         <Subtitle>계정에 로그인하여 계속하세요.</Subtitle>
 
+
+        <Input
+          type="text"
+          placeholder="아이디"
+          value={userId}
+          onChange={handleChange(setUserId)}
+        />
+
         <Input
           type="email"
           placeholder="이메일 주소"
           value={email}
           onChange={handleChange(setEmail)}
         />
+
         <Input
-          type="password"
-          placeholder="비밀번호"
-          value={password}
-          onChange={handleChange(setPassword)}
+          type="text"
+          placeholder="이름"
+          value={name}
+          onChange={handleChange(setName)}
         />
+
 
         <LoginButton onClick={handleLogin}>로그인</LoginButton>
 
-        <Divider>or continue with</Divider>
+
+        <Divider><span>or continue with</span></Divider> 
 
         <SignupButton onClick={() => navigate("/signup")}>회원 가입</SignupButton>
 
@@ -76,7 +91,8 @@ function LoginPage() {
 
 export default LoginPage;
 
-// ✅ styled-components (UI는 그대로 유지)
+
+
 const Container = styled.div`
   background-color: black;
   color: white;
@@ -134,7 +150,7 @@ const Input = styled.input`
 `;
 
 const LoginButton = styled.button`
-  width: 420px;
+  width: 420px; 
   padding: 12px;
   border-radius: 6px;
   background-color: #948dce;
@@ -142,6 +158,7 @@ const LoginButton = styled.button`
   font-weight: bold;
   border: none;
   margin-bottom: 24px;
+  display: block;
   cursor: pointer;
 `;
 
@@ -161,7 +178,7 @@ const Divider = styled.div`
 `;
 
 const SignupButton = styled.button`
-  width: 420px;
+  width: 420px; 
   padding: 12px;
   border-radius: 6px;
   background-color: transparent;
@@ -177,8 +194,8 @@ const RememberMe = styled.div`
   align-items: center;
   font-size: 14px;
   color: #aaa;
-  width: 400px;
-  justify-content: center;
+  width: 400px; 
+  justify-content:center; 
 
   input[type="checkbox"] {
     margin-right: 8px;
@@ -198,7 +215,7 @@ const RememberMe = styled.div`
   }
 
   input[type="checkbox"]:checked::after {
-    content: "✔";
+    content: '✔';
     color: black;
     font-size: 12px;
     position: absolute;

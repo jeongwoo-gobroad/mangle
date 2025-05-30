@@ -56,7 +56,7 @@ function SignupPage() {
       console.log("회원가입 요청 데이터:", signupData);
 
       // 백엔드 POST 요청
-      const response = await axios.post("http://192.168.202.11:8080/auth/signup", signupData);
+      const response = await axios.post("http://127.0.0.1:8080/auth/signup", signupData);
 
       // 성공 응답 처리
       console.log("회원가입 성공:", response.data);
@@ -330,3 +330,6 @@ const LoginLink = styled.a`
     text-decoration: underline;
   }
 `;
+
+
+
