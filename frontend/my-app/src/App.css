@@ -1,40 +1,20 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+/* 기본 설정 */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'sans-serif', Arial, Helvetica, sans-serif;
+  background-color: black;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
+/* 앱 전체 래퍼 */
 .app {
   background-color: black;
   color: white;
   min-height: 100vh;
-  font-family: sans-serif;
 }
 
+/* 상단 바 */
 .top-bar {
   background-color: black;
   padding: 0.5rem 1rem;
@@ -72,14 +52,42 @@
   height: 1px;
   background-color: white;
   width: 100%;
+  margin: 0.5rem 0;
 }
 
+/* 카드 리스트 */
+.card-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem; /* ⬅ 간격 약간 줄임 */
+}
+
+.card {
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 240px; /* ✅ 기존 300px → 줄임 */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.card-img {
+  width: 100%;
+  height: 140px; /* ✅ 기존 180px → 줄임 */
+  object-fit: cover;
+  display: block;
+}
+
+.card-body {
+  padding: 0.75rem; /* ✅ 기존 1rem → 줄임 */
+}
+
+/* 채팅 화면 */
 .chat-wrapper {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #fff;
-  font-family: sans-serif;
+  background-color: black;
 }
 
 .chat-header {
@@ -87,8 +95,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  border-bottom: 1px solid #ddd;
-  font-weight: bold;
+  border-bottom: 1px solid #444;
 }
 
 .chat-profile {
@@ -100,7 +107,6 @@
 .chat-body {
   flex: 1;
   padding: 1rem;
-  background: #f7eef9;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -115,13 +121,13 @@
 }
 
 .chat-bubble.other {
-  background: #e4e4e4;
+  background: #333;
   align-self: flex-start;
   border-top-left-radius: 0;
 }
 
 .chat-bubble.me {
-  background: #a78bfa;
+  background: #948dce;
   color: white;
   align-self: flex-end;
   border-top-right-radius: 0;
@@ -132,25 +138,55 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  background: #f1e9f9;
-  border-top: 1px solid #ccc;
+  background: #1e1e1e;
+  border-top: 1px solid #444;
 }
 
 .chat-input-wrapper input {
   flex: 1;
   border: none;
-  background: #e7dbf7;
+  background: #333;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
+  color: white;
   outline: none;
 }
 
+/* 중앙 정렬 및 배너 */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.banner-container {
+  width: 100vw;
+  overflow: hidden;
+}
+
+.banner-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.main-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+.text-center {
+  text-align: center;
 }
