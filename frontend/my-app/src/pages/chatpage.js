@@ -5,7 +5,7 @@ import {
   FiPlus,
   FiSearch,
 } from "react-icons/fi";
-import "./ChatPage.css";
+import "../App.css";
 
 function ChatPage() {
   const [messages, setMessages] = useState([
