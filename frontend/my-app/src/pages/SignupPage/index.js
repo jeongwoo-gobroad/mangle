@@ -4,6 +4,17 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const generateRandomStats = () => {
+  return {
+    teamwork: Math.floor(Math.random() ) + 1,
+    communication: Math.floor(Math.random() ) + 1,
+    creativity: Math.floor(Math.random() ) + 1,
+    responsibility: Math.floor(Math.random() ) + 1,
+    leadership: Math.floor(Math.random()) + 1,
+    adaptability: Math.floor(Math.random() ) + 1,
+  };
+};
+
 function SignupPage() {
   const navigate = useNavigate();
 
@@ -38,6 +49,7 @@ function SignupPage() {
 
   const handleRegister =  async ()  => {
     try {
+      const stats = generateRandomStats();
       // 전송할 회원가입 데이터
       const signupData = {
         email,
@@ -49,6 +61,7 @@ function SignupPage() {
         major,
         role,
         interests,
+        stats,
       };
       // ✅ 보내는 JSON 구조 확인 (개발자 도구 Console 탭에서 볼 수 있음)
       console.log("🔥 프론트에서 서버로 보낼 데이터:", JSON.stringify(signupData, null, 2));
@@ -56,7 +69,7 @@ function SignupPage() {
       console.log("회원가입 요청 데이터:", signupData);
 
       // 백엔드 POST 요청
-      const response = await axios.post("http://jeongwoo-kim-web.myds.me:8080/", signupData);
+      const response = await axios.post("http://192.168.202.11:8080/auth/signup", signupData);
 
       // 성공 응답 처리
       console.log("회원가입 성공:", response.data);
