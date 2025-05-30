@@ -28,6 +28,53 @@
   color: #61dafb;
 }
 
+.app {
+  background-color: black;
+  color: white;
+  min-height: 100vh;
+  font-family: sans-serif;
+}
+
+.top-bar {
+  background-color: black;
+  padding: 0.5rem 1rem;
+}
+
+.top-bar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+}
+
+.logo-text {
+  color: white;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.profile-img {
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+}
+
+.divider {
+  height: 1px;
+  background-color: white;
+  width: 100%;
+}
+
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
