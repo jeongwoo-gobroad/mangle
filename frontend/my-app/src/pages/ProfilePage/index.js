@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 // HexagonGraph component (변동 없음)
 const HexagonGraph = ({ capabilities, values }) => {
-    const size = 70;
+    const size = 120;
     const padding = 100;
     const centerX = size + padding;
     const centerY = size + padding;
