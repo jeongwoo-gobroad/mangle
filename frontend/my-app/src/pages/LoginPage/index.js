@@ -20,7 +20,7 @@ function LoginPage() {
   const handleLogin = async () => {
     try {
 
-      const response = await axios.post("http://jeongwoo-kim-web.myds.me:8080/", {
+      const response = await axios.post("http://jeongwoo-kim-web.myds.me:8080/auth/login", {
         userId, 
         email,  
         name,   
