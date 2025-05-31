@@ -45,7 +45,7 @@ function App() {
           <Route path="/first" element={<FirstPage />} />
           <Route path="/team" element={<TeamPage />} />
           <Route path="/chat" element={<ChatPage />} />
-          <Route path="/request-complete" element={<RequestPage />}>
+          <Route path="/request-complete" element={<RequestPage />}/>
           <Route path="/list" element={<ListPage />} />   
         </Routes>
       </Router>

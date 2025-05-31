@@ -61,7 +61,7 @@ const CirclePage = () => {
 
   const searched = submittedQuery !== "";
   const projectsToShow = searched ? searchedProjects : myTeamPosts;
-  const sectionTitle = searched ? "기존에 이런게 있었어요" : "내가 작성한 팀 모집 글";
+  const sectionTitle = searched ? "기존에 이런게 있었어요" : "나에게 딱 맞는 팀 모집 글";
 
   useEffect(() => {
     if (!submittedQuery) {
@@ -91,7 +91,7 @@ const CirclePage = () => {
           title: item.target_text,
           description:
             item.how_similar?.similarity_points?.map((p) => p.similar_point_from_B).join(" · ") || "",
-          image: "/images/related.png",
+           image: "/images/carbon.png",
           similarity: item.similarity.toFixed(2),
         }));
         console.log("📦 변환된 프로젝트 데이터:", converted);
@@ -102,35 +102,34 @@ const CirclePage = () => {
       });
   }, [submittedQuery]);
   // 🟢 초기 진입 또는 뒤로 가기 시: 내가 작성한 팀 모집글 불러오기
-  const fetchMyTeamPosts = async () => {
+  const fetchMatchedTeamPosts = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
     try {
-      const res = await fetch(`${BASE_URL}/teamposts/my`, {
+      const res = await fetch(`${BASE_URL}/teamposts/match`, { // ✅ 수정된 경로
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      if (!res.ok) throw new Error("내 팀 포스트 가져오기 실패");
+      if (!res.ok) throw new Error("맞춤형 팀 포스트 가져오기 실패");
 
       const data = await res.json();
-      const converted = data.posts.map((item) => ({
+      const converted = data.matchedPosts.map((item) => ({ // ✅ 수정된 필드명
         title: item.contestTitle,
         description: item.description,
-        image: "/images/myteam.png",
+        image: "/images/document.png",
         similarity: null,
       }));
 
       setMyTeamPosts(converted);
     } catch (err) {
-      console.error("팀포스트 불러오기 오류:", err);
+      console.error("맞춤형 팀 포스트 불러오기 오류:", err);
     }
   };
-
   useEffect(() => {
-    fetchMyTeamPosts(); // 초기 로딩 시 호출
+    fetchMatchedTeamPosts(); // 초기 로딩 시 호출
   }, []);
 
   const handleSubmit = (e) => {
@@ -143,7 +142,7 @@ const CirclePage = () => {
     setQuery("");
     setSubmittedQuery("");
     setSearchedProjects([]);
-    fetchMyTeamPosts(); // 뒤로 가기 시 다시 불러오기
+    fetchMatchedTeamPosts(); // 뒤로 가기 시 다시 불러오기
   };
 
   return (
