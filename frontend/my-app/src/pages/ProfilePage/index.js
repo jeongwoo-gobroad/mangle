@@ -1,8 +1,9 @@
-//src/pages/ProfilePage/index.js
+// src/pages/ProfilePage/index.js
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
-// HexagonGraph component (변동 없음)
+// HexagonGraph component (변경 없음)
 const HexagonGraph = ({ capabilities, values }) => {
     const size = 120;
     const padding = 100;
@@ -81,7 +82,7 @@ const HexagonGraph = ({ capabilities, values }) => {
                             dyOffset = 12;
                         } else if (i === 4) {
                             textAnchor = "end";
-                            dxOffset = 5;
+                            dxOffset = 5; // 이 값은 아마 -5가 되어야 할 수도 있습니다. 텍스트 위치를 확인하세요.
                             dyOffset = 8;
                         } else if (i === 5) {
                             textAnchor = "end";
@@ -122,6 +123,8 @@ function ProfilePage() {
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
 
+    const navigate = useNavigate();
+
     const handleToggle = (setter, currentValue) => {
         setter(!currentValue);
     };
@@ -161,18 +164,17 @@ function ProfilePage() {
     return (
         <Container>
             <Header>
-                <HeaderLeft> {/* 햄버거 메뉴와 맹글을 묶기 위한 새로운 Wrapper */}
-                    <HamburgerMenu>
+                <HeaderLeft>
+                    <Menu>
                         <Line />
                         <Line />
                         <Line />
-                    </HamburgerMenu>
+                    </Menu>
                     <HeaderTitle>
                         ＊ 맹글
                     </HeaderTitle>
                 </HeaderLeft>
-                {/* 프로필 이미지가 검정 화면 안에 완전히 들어오게 하기 위해 margin-right와 width, height를 확인하세요. */}
-                <ProfileImage src="/images/profile.png" alt="프로필 이미지" /> {/* 실제 프로필 이미지 경로로 변경하세요 */}
+                <ProfileImage src="/images/profile.png" alt="프로필 이미지" onClick={() => navigate('/profile')} />
             </Header>
             <ContentArea>
                 <PageTitle>Profile Settings</PageTitle>
@@ -306,12 +308,11 @@ function ProfilePage() {
                 </ButtonContainer>
             </ContentArea>
 
-            {/* Bottom Navigation Bar Added */}
             <BottomNavBar>
-                <NavBarIcon src="/images/home.png" alt="first" />
-                <NavBarIcon src="/images/circle.png" alt="circle" />
-                <NavBarIcon src="/images/link.png" alt="team" />
-                <NavBarIcon2 src="/images/profileicon.png" alt="profile" />
+                <NavBarIcon src="/images/home.png" alt="Home" onClick={() => navigate('/first')} />
+                <NavBarIcon src="/images/circle.png" alt="Circle" onClick={() => navigate('/circle')} />
+                <NavBarIcon src="/images/link.png" alt="Link" onClick={() => navigate('/team')} />
+                <NavBarIcon2 src="/images/profileicon.png" alt="Profile" onClick={() => navigate('/profile')} />
             </BottomNavBar>
         </Container>
     );
@@ -327,9 +328,8 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Adjust padding-bottom to account for the fixed bottom nav bar */
-    padding-bottom: 60px; /* Height of the BottomNavBar */
-    position: relative; /* Needed for z-index of fixed elements to work relative to content */
+    padding-bottom: 120px; /* 수정된 부분: 하단 네비게이션 바와 스크롤을 위한 여백 증가 */
+    position: relative;
 `;
 
 const Header = styled.div`
@@ -339,23 +339,22 @@ const Header = styled.div`
     width: 100%;
     border-bottom: 1px solid #333;
     padding-bottom: 5px;
-    padding-left: 30px; /* 왼쪽 패딩 */
+    padding-left: 30px;
     padding-top: 60px;
-    padding-right: 30px; /* 오른쪽 패딩 */
+    padding-right: 30px;
     margin-bottom: 0px;
-    display: flex; /* 내부 요소들을 한 줄에 정렬 */
-    align-items: center; /* 세로 중앙 정렬 */
-    justify-content: space-between; /* 양 끝 정렬 */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 `;
 
-// 햄버거 메뉴와 맹글을 묶기 위한 새로운 Wrapper
 const HeaderLeft = styled.div`
     display: flex;
     align-items: center;
-    gap: 15px; /* 햄버거 메뉴와 맹글 텍스트 사이 간격 */
+    gap: 15px;
 `;
 
-const HamburgerMenu = styled.div`
+const Menu = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -375,13 +374,12 @@ const Line = styled.div`
 const HeaderTitle = styled.div`
     display: flex;
     align-items: center;
-    gap: 10px; /* 로고와 맹글 텍스트 사이 간격 */
+    gap: 10px;
     font-size: 24px;
     color: #948dce;
     font-weight: bold;
-    margin-bottom: 7px; 
+    margin-bottom: 7px;
 `;
-
 
 const ProfileImage = styled.img`
     width: 40px;
@@ -389,21 +387,19 @@ const ProfileImage = styled.img`
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #948dce;
-    /* Header의 padding-right와 조화롭게 작동하도록 margin-right를 조절 */
-    margin-right: 15px; /* Negative margin to pull it left */
+    margin-right: 15px;
     cursor: pointer;
-    margin-bottom: 7px; 
+    margin-bottom: 7px;
 `;
-
 
 const ContentArea = styled.div`
     width: 800px;
     max-width: 90%;
     margin-top: 0px;
     padding: 20px;
-    /* Enable scrolling for content, but exclude the bottom nav bar */
     overflow-y: auto;
-    flex-grow: 1; /* Allow content to take up available space */
+    flex-grow: 1;
+    padding-bottom: 80px; /* 수정된 부분: 콘텐츠 하단 여백 추가 */
 `;
 
 const PageTitle = styled.h1`
@@ -627,43 +623,42 @@ const GraphContainer = styled.div`
     padding-left: 20px;
 `;
 
-// New Styled Components for Bottom Navigation Bar
 const BottomNavBar = styled.div`
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 60px; /* Height of the navigation bar */
-    background-color: #1a1a1a; /* Dark background as seen in the image */
-    border-top: 1px solid #333; /* Subtle top border */
+    height: 60px;
+    background-color: #1a1a1a;
+    border-top: 1px solid #333;
     display: flex;
-    justify-content: space-around; /* Distributes icons evenly */
+    justify-content: space-around;
     align-items: center;
-    z-index: 1000; /* Ensure it stays on top */
-    padding-bottom: env(safe-area-inset-bottom); /* For iPhone X and newer */
+    z-index: 1000;
+    padding-bottom: env(safe-area-inset-bottom);
 `;
 
 const NavBarIcon = styled.img`
-    width: 50px; /* Size of the icons */
-    height: 50px;
+    width: 70px;
+    height: 70px;
     cursor: pointer;
-    filter: invert(1); /* Inverts color to make black icons white on dark background */
-    opacity: 0.7; /* Slightly faded */
+    filter: invert(1);
+    opacity: 0.7;
 
     &:hover {
-        opacity: 1; /* Full opacity on hover */
+        opacity: 1;
     }
 `;
 
 const NavBarIcon2 = styled.img`
-    width: 65px; /* Size of the icons */
+    width: 65px;
     height: 65px;
-    margin-top: 10px; 
+    margin-top: 10px;
     cursor: pointer;
-    filter: invert(1); /* Inverts color to make black icons white on dark background */
-    opacity: 0.7; /* Slightly faded */
+    filter: invert(1);
+    opacity: 0.7;
 
     &:hover {
-        opacity: 1; /* Full opacity on hover */
+        opacity: 1;
     }
 `;
