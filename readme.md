@@ -36,8 +36,8 @@ HTTP_PORT="your_server_port"
 ```
 
 **3-2. `config/config.json` 파일 설정**
+backend/config/config.json 파일에 다음 정보 입력
 ```json
-// backend/config/config.json 파일에 다음 정보 입력력
 {
   "development": {
     "username": "your_database_username",
