@@ -9,6 +9,7 @@
 ### 사전 요구사항
 - **Node.js 20 이상** 설치 필요
 - **Git** 설치 필요
+- **데이터베이스** (MySQL/PostgreSQL 등) 설치 및 설정 완료
 
 ### 단계별 설치 가이드
 
@@ -24,20 +25,50 @@ cd backend
 npm install
 ```
 
-#### 3. 프론트엔드 설정
+#### 3. 환경설정 파일 구성
+백엔드 실행 전 반드시 다음 파일들을 설정해야 합니다:
+
+**3-1. `.env` 파일 설정**
+```bash
+# backend/.env 파일에 다음 정보 입력
+DB_HOST=your_database_host
+DB_PORT=your_database_port
+DB_USER=your_database_username
+DB_PASSWORD=your_database_password
+DB_NAME=your_database_name
+SERVER_PORT=your_server_port
+```
+
+**3-2. `config/config.json` 파일 설정**
+```json
+{
+  "development": {
+    "username": "your_database_username",
+    "password": "your_database_password",
+    "database": "your_database_name",
+    "host": "your_database_host",
+    "port": "your_database_port",
+    "dialect": "mysql"
+  }
+}
+```
+
+> **⚠️ 중요**: IP 주소, 포트, 데이터베이스 정보를 정확히 입력하지 않으면 애플리케이션이 실행되지 않습니다.
+
+#### 4. 프론트엔드 설정
 ```bash
 cd ../frontend/my-app
 npm install
 npm run build
 ```
 
-#### 4. 애플리케이션 실행
+#### 5. 애플리케이션 실행
 ```bash
 cd ../../backend
 node app.js
 ```
 
-설치가 완료되면 웹 브라우저에서 애플리케이션에 접근할 수 있습니다.
+설치가 완료되면 웹 브라우저에서 설정한 포트를 통해 애플리케이션에 접근할 수 있습니다.
 
 ---
 
