@@ -21,10 +21,73 @@ function PostingPage() {
   const [titleClicked, setTitleClicked] = useState(false);
   const [contentClicked, setContentClicked] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  
+  // 새로 추가된 상태 변수들
+  const [desiredRoles, setDesiredRoles] = useState([]);
+  const [hashtags, setHashtags] = useState([]);
+
+  // 옵션 배열들
+  const desiredRolesOptions = [
+    "프론트엔드", "백엔드", "AI", "디자이너", "마케터", "기획자", "아트", "경영"
+  ];
+  
+  const hashtagOptions = [
+    "AI", "스타트업", "관공서", "공모전", "지자체"
+  ];
 
   const handleClearTitle = () => setTitle("");
   const handleClearContent = () => setContent("");
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+
+  // 체크박스 핸들러 함수들
+  const handleDesiredRolesChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setDesiredRoles((prevRoles) => [...prevRoles, value]);
+    } else {
+      setDesiredRoles((prevRoles) =>
+        prevRoles.filter((role) => role !== value)
+      );
+    }
+  };
+
+  const handleHashtagsChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setHashtags((prevHashtags) => [...prevHashtags, value]);
+    } else {
+      setHashtags((prevHashtags) =>
+        prevHashtags.filter((hashtag) => hashtag !== value)
+      );
+    }
+  };
+
+  // 체크박스 컨테이너 스타일
+  const checkboxContainerStyle = {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    fontSize: "14px",
+    color: "#aaa",
+    cursor: "pointer",
+  };
+
+  const checkboxStyle = {
+    appearance: "none",
+    width: "18px",
+    height: "18px",
+    border: "1px solid #999",
+    borderRadius: "4px",
+    backgroundColor: "black",
+    position: "relative",
+    cursor: "pointer",
+  };
+
+  const checkedCheckboxStyle = {
+    ...checkboxStyle,
+    backgroundColor: "#948dce",
+    borderColor: "#948dce",
+  };
 
   return (
     <div className="app">
@@ -198,6 +261,100 @@ function PostingPage() {
         </p>
       </div>
 
+      {/* 원하는 역할 선택 */}
+      <div style={{ padding: "1rem" }}>
+        <p style={{ fontSize: "16px", color: "#eee", marginBottom: "10px" }}>
+          원하는 역할 선택
+        </p>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "10px",
+            width: "100%",
+          }}
+        >
+          {desiredRolesOptions.map((option) => (
+            <label key={option} style={checkboxContainerStyle}>
+              <input
+                type="checkbox"
+                value={option}
+                checked={desiredRoles.includes(option)}
+                onChange={handleDesiredRolesChange}
+                style={
+                  desiredRoles.includes(option)
+                    ? checkedCheckboxStyle
+                    : checkboxStyle
+                }
+              />
+              <span>{option}</span>
+              {desiredRoles.includes(option) && (
+                <style>
+                  {`
+                    input[value="${option}"]:checked::after {
+                      content: '✔';
+                      color: black;
+                      font-size: 14px;
+                      position: absolute;
+                      top: 50%;
+                      left: 50%;
+                      transform: translate(-50%, -50%);
+                    }
+                  `}
+                </style>
+              )}
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* 해시태그 선택 */}
+      <div style={{ padding: "1rem" }}>
+        <p style={{ fontSize: "16px", color: "#eee", marginBottom: "10px" }}>
+          해시태그 선택
+        </p>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "10px",
+            width: "100%",
+          }}
+        >
+          {hashtagOptions.map((option) => (
+            <label key={option} style={checkboxContainerStyle}>
+              <input
+                type="checkbox"
+                value={option}
+                checked={hashtags.includes(option)}
+                onChange={handleHashtagsChange}
+                style={
+                  hashtags.includes(option)
+                    ? checkedCheckboxStyle
+                    : checkboxStyle
+                }
+              />
+              <span>{option}</span>
+              {hashtags.includes(option) && (
+                <style>
+                  {`
+                    input[value="${option}"]:checked::after {
+                      content: '✔';
+                      color: black;
+                      font-size: 14px;
+                      position: absolute;
+                      top: 50%;
+                      left: 50%;
+                      transform: translate(-50%, -50%);
+                    }
+                  `}
+                </style>
+              )}
+            </label>
+          ))}
+        </div>
+      </div>
+
       {/* 제출 버튼 */}
       <div
         style={{
@@ -221,7 +378,16 @@ function PostingPage() {
             fontSize: "0.9rem",
             cursor: "pointer",
           }}
-          onClick={() => alert("제출되었습니다")}
+          onClick={() => {
+            const formData = {
+              contestTitle: title,
+              desiredRoles: desiredRoles,
+              description: content,
+              hashtags: hashtags
+            };
+            console.log("제출된 데이터:", formData);
+            alert("제출되었습니다");
+          }}
         >
           <FiStar size={16} style={{ marginRight: "0.4rem" }} />
           제출하기
