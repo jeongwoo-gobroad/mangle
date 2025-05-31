@@ -1,9 +1,10 @@
 {
   "development": {
-    "username": "root",       
-    "password": "1q2w3e4r!",
+    "username": "mangle_mvp",       
+    "password": "Kim-jangu-1600",
     "database": "blog",
     "host": "127.0.0.1",
+    "port": 17686,
     "dialect": "mysql"
   },
   "test": {

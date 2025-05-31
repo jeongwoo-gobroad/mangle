@@ -49,6 +49,17 @@ class User extends Sequelize.Model {
         allowNull: false,
         defaultValue: '백엔드 개발자', // 기본 직군
       },
+      stats: {
+        type: Sequelize.TEXT, // JSON string으로 저장
+        allowNull: true,
+        get() {
+          const raw = this.getDataValue('stats');
+          return raw ? JSON.parse(raw) : {};
+        },
+        set(value) {
+          this.setDataValue('stats', JSON.stringify(value));
+        },
+      },
     }, {
       sequelize,
       modelName: 'User',

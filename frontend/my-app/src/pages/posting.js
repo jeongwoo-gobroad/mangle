@@ -71,7 +71,7 @@ function PostingPage() {
       const data = await response.json();
       console.log("제출 성공:", data);
       alert("프로젝트가 성공적으로 제출되었습니다!");
-      navigate("/"); // 메인 페이지로 이동
+      navigate("/first"); // /first 경로로 리다이렉션
     } catch (error) {
       console.error("제출 실패:", error);
       alert("제출 실패: " + (error.message || "서버 오류"));

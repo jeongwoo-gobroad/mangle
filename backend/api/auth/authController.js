@@ -6,7 +6,7 @@ const signup = async (req, res) => {
   try {
     // 🔍 프론트에서 보낸 데이터 로그
     console.log("📥 [signup] 요청 바디:", req.body);
-    const { email, userId, password, name, school, grade, major, interests, role } = req.body;
+    const { email, userId, password, name, school, grade, major, interests, role, stats } = req.body;
       // 🔍 필수 필드 체크 로그
     if (!email || !userId || !password) {
       console.warn("⚠️ [signup] 필수 필드 누락:", { email, userId, password });
@@ -28,6 +28,7 @@ const signup = async (req, res) => {
       major,
       interests,
       role, // 배열로 받은 것 → model에서 JSON으로 자동 처리
+      stats,
     });
      // ✅ 성공 응답
     console.log("✅ [signup] 회원가입 성공:", newUser.userId);
