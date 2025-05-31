@@ -1,21 +1,21 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "atomize"; // ✅ 추가
-import "./App.css"; // 전역 스타일
+import { ThemeProvider } from "atomize";
+import "./App.css";
 
-// 기존 페이지들
+// 로그인 관련 페이지들
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import SigncompletePage from "./pages/SigncompletePage";
 import ProfilePage from "./pages/ProfilePage";
 
-// 새로 추가된 페이지들
+// 기능 페이지들
 import CirclePage from "./pages/CirclePage";
 import FirstPage from "./pages/FirstPage";
 import PostingPage from "./pages/posting";
 import ChatPage from "./pages/ChatPage";
 
-// ✅ atomize 기본 theme
+// atomize 기본 테마
 const theme = {
   colors: {
     black: "#000000",

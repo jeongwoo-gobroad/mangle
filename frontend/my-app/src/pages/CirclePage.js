@@ -16,31 +16,31 @@ const initialProjects = [
   {
     title: "TasteAI",
     description: "AI를 이용해 사용자 선호도를 분석하고 레스토랑을 추천해주는 앱",
-    image: "res.png",
+    image: "/images/res copy.png",
     similarity: null,
   },
   {
     title: "FlavorFinder",
     description: "GPT 기반 리뷰 분석으로 식당 트렌드를 예측하는 머신러닝 프로젝트",
-    image: "trend.png",
+    image: "/images/trend copy.png",
     similarity: null,
   },
   {
     title: "StudySync",
     description: "학생들의 학습 데이터를 분석해 개인 맞춤형 공부 루틴을 추천하는 AI 서비스",
-    image: "study.png",
+    image: "/images/study copy.png",
     similarity: null,
   },
   {
     title: "EcoTrack",
     description: "탄소 배출량을 분석하고 절감 아이디어를 추천하는 지속가능성 분석 플랫폼",
-    image: "carbon.png",
+    image: "/images/carbon copy.png",
     similarity: null,
   },
   {
     title: "JobMatchAI",
     description: "이력서와 경력 기반으로 최적의 채용 공고를 매칭해주는 AI 기반 구직 플랫폼",
-    image: "work.png",
+    image: "/images/work copy.png",
     similarity: null,
   },
 ];
@@ -161,7 +161,7 @@ const CirclePage = () => {
         }}
       >
         <img
-          src="01.png"
+          src="/images/01.png"
           alt="main"
           style={{
             borderRadius: "0.5rem",
