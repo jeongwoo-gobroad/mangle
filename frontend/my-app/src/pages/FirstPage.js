@@ -237,7 +237,7 @@ const CirclePage = () => {
 
       {/* 하단 바 */}
       <BottomNavBar>
-        <NavBarIcon src="/images/home.png" alt="Home" onClick={() => navigate("/list")} />
+        <NavBarIcon src="/images/home.png" alt="Home" onClick={() => navigate("/first")} />
         <NavBarIcon src="/images/circle.png" alt="Circle" onClick={() => navigate("/circle")} />
         <NavBarIcon src="/images/link.png" alt="Link" onClick={() => navigate("/another-page")} />
         <NavBarIcon2 src="/images/profileicon.png" alt="Profile" onClick={() => navigate("/profile")} />

@@ -8,9 +8,47 @@ import {
   FiPlus,
   FiChevronRight,
 } from "react-icons/fi";
-import { useNavigate } from "react-router-dom"; // ✅ 추가
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 const BASE_URL = "http://jeongwoo-kim-web.myds.me:8080";
+
+const BottomNavBar = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #1a1a1a;
+  border-top: 1px solid #333;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const NavBarIcon = styled.img`
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  filter: invert(1);
+  opacity: 0.7;
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const NavBarIcon2 = styled.img`
+  width: 65px;
+  height: 65px;
+  margin-top: 10px;
+  cursor: pointer;
+  filter: invert(1);
+  opacity: 0.7;
+  &:hover {
+    opacity: 1;
+  }
+`;
 
 const initialProjects = [
   {
@@ -37,16 +75,10 @@ const initialProjects = [
     image: "/images/carbon copy.png",
     similarity: null,
   },
-  {
-    title: "JobMatchAI",
-    description: "이력서와 경력 기반으로 최적의 채용 공고를 매칭해주는 AI 기반 구직 플랫폼",
-    image: "/images/work copy.png",
-    similarity: null,
-  },
 ];
 
 const CirclePage = () => {
-  const navigate = useNavigate(); // ✅ 추가
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [searchedProjects, setSearchedProjects] = useState([]);
@@ -57,13 +89,8 @@ const CirclePage = () => {
 
   useEffect(() => {
     if (!submittedQuery) return;
-
     const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("로그인이 필요합니다.");
-      return;
-    }
-
+    if (!token) return;
     fetch(`${BASE_URL}/contests/similarity`, {
       method: "POST",
       headers: {
@@ -76,18 +103,12 @@ const CirclePage = () => {
         if (!res.ok) throw new Error("유사도 검색 실패");
         return res.json();
       })
-      .then((data) => {
-        setSearchedProjects(data);
-      })
-      .catch((err) => {
-        console.error("API 호출 오류:", err);
-      });
+      .then((data) => setSearchedProjects(data))
+      .catch((err) => console.error("API 호출 오류:", err));
   }, [submittedQuery]);
 
   const handleSubmit = (e) => {
-    if (e.key === "Enter") {
-      setSubmittedQuery(query);
-    }
+    if (e.key === "Enter") setSubmittedQuery(query);
   };
 
   const handleBack = () => {
@@ -104,16 +125,10 @@ const CirclePage = () => {
         minHeight: "100vh",
         fontFamily: "sans-serif",
         position: "relative",
+        paddingBottom: "140px",
       }}
     >
-      {/* 상단 바 */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "1rem",
-        }}
-      >
+      <div style={{ display: "flex", justifyContent: "space-between", padding: "1rem" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
           <FiMenu size={24} />
           <span style={{ fontWeight: "bold" }}>맹글</span>
@@ -125,54 +140,23 @@ const CirclePage = () => {
         />
       </div>
 
-      {/* 유사도 점검 상단바 */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "0.75rem 1rem",
-        }}
-      >
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.75rem 1rem" }}>
         {searched ? (
           <FiArrowLeft size={22} onClick={handleBack} style={{ cursor: "pointer" }} />
         ) : (
           <div style={{ width: 22 }} />
         )}
-        <span style={{ fontWeight: "bold", fontSize: "1.1rem" }}>
-          아이디어 유사도 점검
-        </span>
+        <span style={{ fontWeight: "bold", fontSize: "1.1rem" }}>아이디어 유사도 점검</span>
         <div style={{ display: "flex", gap: "1rem" }}>
           <FiBookmark size={20} />
           <FiMoreVertical size={20} />
         </div>
       </div>
 
-      {/* 추천 박스 */}
-      <div
-        style={{
-          background: "#222",
-          margin: "1rem",
-          padding: "1rem",
-          borderRadius: "1rem",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <img
-          src="/images/01.png"
-          alt="main"
-          style={{
-            borderRadius: "0.5rem",
-            width: "60px",
-            height: "60px",
-          }}
-        />
+      <div style={{ background: "#222", margin: "1rem", padding: "1rem", borderRadius: "1rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <img src="/images/01.png" alt="main" style={{ borderRadius: "0.5rem", width: "60px", height: "60px" }} />
         <div style={{ flex: 1, marginLeft: "1rem" }}>
-          <strong>
-            {submittedQuery || "검색창에 입력하고 유사한 프로젝트를 찾아보세요"}
-          </strong>
+          <strong>{submittedQuery || "검색창에 입력하고 유사한 프로젝트를 찾아보세요"}</strong>
           <div>
             <button
               style={{
@@ -183,7 +167,7 @@ const CirclePage = () => {
                 borderRadius: "999px",
                 marginTop: "0.5rem",
               }}
-              onClick={() => navigate("/posting")} // ✅ 버튼 클릭 시 페이지 이동
+              onClick={() => navigate("/posting")}
             >
               프로젝트 시작하기
             </button>
@@ -191,65 +175,21 @@ const CirclePage = () => {
         </div>
       </div>
 
-      {/* 섹션 제목 */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "0 1rem",
-          fontWeight: "bold",
-        }}
-      >
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 1rem", fontWeight: "bold" }}>
         <span>{sectionTitle}</span>
         <FiChevronRight />
       </div>
 
-      {/* 프로젝트 카드 리스트 */}
-      <div
-        style={{
-          maxHeight: "calc(100vh - 320px)",
-          overflowY: "scroll",
-          padding: "1rem",
-          paddingBottom: "6rem",
-        }}
-      >
+      <div style={{ maxHeight: "calc(100vh - 360px)", overflowY: "scroll", padding: "1rem" }}>
         {projectsToShow.map((proj, idx) => (
-          <div
-            key={idx}
-            style={{
-              display: "flex",
-              background: "#222",
-              padding: "1rem",
-              borderRadius: "1rem",
-              marginBottom: "1rem",
-            }}
-          >
-            <img
-              src={proj.image}
-              alt={proj.title}
-              style={{
-                width: 60,
-                height: 60,
-                borderRadius: "0.5rem",
-                objectFit: "cover",
-              }}
-            />
+          <div key={idx} style={{ display: "flex", background: "#222", padding: "1rem", borderRadius: "1rem", marginBottom: "1rem" }}>
+            <img src={proj.image} alt={proj.title} style={{ width: 60, height: 60, borderRadius: "0.5rem", objectFit: "cover" }} />
             <div style={{ marginLeft: "1rem", flex: 1 }}>
               <div style={{ fontWeight: "bold" }}>{proj.title}</div>
               <div style={{ fontSize: "0.85rem", color: "#ccc" }}>{proj.description}</div>
               {searched && proj.similarity && (
-                <div
-                  style={{
-                    marginTop: "0.5rem",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    fontSize: "0.85rem",
-                  }}
-                >
-                  <FiPlus size={14} />
-                  유사도 · {proj.similarity}
+                <div style={{ marginTop: "0.5rem", display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.85rem" }}>
+                  <FiPlus size={14} /> 유사도 · {proj.similarity}
                 </div>
               )}
             </div>
@@ -258,13 +198,13 @@ const CirclePage = () => {
         ))}
       </div>
 
-      {/* 하단 검색창 */}
+      {/* 보라색 검색창 */}
       <div
         style={{
           position: "fixed",
-          bottom: 0,
+          bottom: "60px",
           left: 0,
-          width: "98%",
+          width: "100%",
           backgroundColor: "#a78bfa",
           color: "white",
           padding: "0.75rem 1rem",
@@ -272,6 +212,7 @@ const CirclePage = () => {
           alignItems: "center",
           borderTopLeftRadius: "1rem",
           borderTopRightRadius: "1rem",
+          zIndex: 1001,
         }}
       >
         <FiMenu />
@@ -293,6 +234,14 @@ const CirclePage = () => {
         />
         <FiSearch color="white" style={{ marginLeft: "0.5rem" }} />
       </div>
+
+      {/* 하단 바 */}
+      <BottomNavBar>
+        <NavBarIcon src="/images/home.png" alt="Home" onClick={() => navigate("/first")} />
+        <NavBarIcon src="/images/circle.png" alt="Circle" onClick={() => navigate("/circle")} />
+        <NavBarIcon src="/images/link.png" alt="Link" onClick={() => navigate("/another-page")} />
+        <NavBarIcon2 src="/images/profileicon.png" alt="Profile" onClick={() => navigate("/profile")} />
+      </BottomNavBar>
     </div>
   );
 };
