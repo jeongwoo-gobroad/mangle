@@ -9,112 +9,101 @@ import {
   FiChevronRight,
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 
 const BASE_URL = "http://jeongwoo-kim-web.myds.me:8080";
-
-const BottomNavBar = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 60px;
-  background-color: #1a1a1a;
-  border-top: 1px solid #333;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  z-index: 1000;
-`;
-
-const NavBarIcon = styled.img`
-  width: 50px;
-  height: 50px;
-  cursor: pointer;
-  filter: invert(1);
-  opacity: 0.7;
-  &:hover {
-    opacity: 1;
-  }
-`;
-
-const NavBarIcon2 = styled.img`
-  width: 65px;
-  height: 65px;
-  margin-top: 10px;
-  cursor: pointer;
-  filter: invert(1);
-  opacity: 0.7;
-  &:hover {
-    opacity: 1;
-  }
-`;
-
-const initialProjects = [
-  {
-    title: "TasteAI",
-    description: "AI를 이용해 사용자 선호도를 분석하고 레스토랑을 추천해주는 앱",
-    image: "/images/res copy.png",
-    similarity: null,
-  },
-  {
-    title: "FlavorFinder",
-    description: "GPT 기반 리뷰 분석으로 식당 트렌드를 예측하는 머신러닝 프로젝트",
-    image: "/images/trend copy.png",
-    similarity: null,
-  },
-  {
-    title: "StudySync",
-    description: "학생들의 학습 데이터를 분석해 개인 맞춤형 공부 루틴을 추천하는 AI 서비스",
-    image: "/images/study copy.png",
-    similarity: null,
-  },
-  {
-    title: "EcoTrack",
-    description: "탄소 배출량을 분석하고 절감 아이디어를 추천하는 지속가능성 분석 플랫폼",
-    image: "/images/carbon copy.png",
-    similarity: null,
-  },
-];
 
 const CirclePage = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [searchedProjects, setSearchedProjects] = useState([]);
+  const [myTeamPosts, setMyTeamPosts] = useState([]);
 
   const searched = submittedQuery !== "";
-  const projectsToShow = searched ? searchedProjects : initialProjects;
-  const sectionTitle = searched ? "기존에 이런게 있었어요" : "이런 프로젝트에 참가해보세요";
+  const projectsToShow = searched ? searchedProjects : myTeamPosts;
+  const sectionTitle = searched ? "기존에 이런게 있었어요" : "내가 작성한 팀 모집 글";
 
   useEffect(() => {
-    if (!submittedQuery) return;
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    fetch(`${BASE_URL}/contests/similarity`, {
+    if (!submittedQuery) {
+      console.log("⛔ submittedQuery가 비어 있음. 요청 중단");
+      return;
+    }
+
+    console.log("🚀 유사도 검색 요청 시작:", submittedQuery);
+
+    fetch("http://jeongwoo-kim-web.myds.me:8000/simliarity_engine/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ content: submittedQuery }),
+      body: JSON.stringify({ target_idea: submittedQuery }),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("유사도 검색 실패");
+        console.log("📡 응답 수신 상태 코드:", res.status);
+        if (!res.ok) {
+          throw new Error(`❌ 유사도 서버 응답 실패 (status ${res.status})`);
+        }
         return res.json();
       })
-      .then((data) => setSearchedProjects(data))
-      .catch((err) => console.error("API 호출 오류:", err));
+      .then((data) => {
+        console.log("✅ 유사도 응답 데이터:", data);
+        const converted = data.map((item) => ({
+          title: item.target_text,
+          description:
+            item.how_similar?.similarity_points?.map((p) => p.similar_point_from_B).join(" · ") || "",
+          image: "/images/related.png",
+          similarity: item.similarity.toFixed(2),
+        }));
+        console.log("📦 변환된 프로젝트 데이터:", converted);
+        setSearchedProjects(converted);
+      })
+      .catch((err) => {
+        console.error("🔴 외부 유사도 서버 호출 오류:", err.message || err);
+      });
   }, [submittedQuery]);
+  // 🟢 초기 진입 또는 뒤로 가기 시: 내가 작성한 팀 모집글 불러오기
+  const fetchMyTeamPosts = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      const res = await fetch(`${BASE_URL}/teamposts/my`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) throw new Error("내 팀 포스트 가져오기 실패");
+
+      const data = await res.json();
+      const converted = data.posts.map((item) => ({
+        title: item.contestTitle,
+        description: item.description,
+        image: "/images/myteam.png",
+        similarity: null,
+      }));
+
+      setMyTeamPosts(converted);
+    } catch (err) {
+      console.error("팀포스트 불러오기 오류:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchMyTeamPosts(); // 초기 로딩 시 호출
+  }, []);
 
   const handleSubmit = (e) => {
-    if (e.key === "Enter") setSubmittedQuery(query);
+    if (e.key === "Enter") {
+      setSubmittedQuery(query);
+    }
   };
 
   const handleBack = () => {
     setQuery("");
     setSubmittedQuery("");
     setSearchedProjects([]);
+    fetchMyTeamPosts(); // 뒤로 가기 시 다시 불러오기
   };
 
   return (
@@ -125,9 +114,9 @@ const CirclePage = () => {
         minHeight: "100vh",
         fontFamily: "sans-serif",
         position: "relative",
-        paddingBottom: "140px",
       }}
     >
+      {/* 상단 바 */}
       <div style={{ display: "flex", justifyContent: "space-between", padding: "1rem" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
           <FiMenu size={24} />
@@ -140,7 +129,15 @@ const CirclePage = () => {
         />
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.75rem 1rem" }}>
+      {/* 검색 결과 상단 바 */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "0.75rem 1rem",
+        }}
+      >
         {searched ? (
           <FiArrowLeft size={22} onClick={handleBack} style={{ cursor: "pointer" }} />
         ) : (
@@ -153,10 +150,31 @@ const CirclePage = () => {
         </div>
       </div>
 
-      <div style={{ background: "#222", margin: "1rem", padding: "1rem", borderRadius: "1rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <img src="/images/01.png" alt="main" style={{ borderRadius: "0.5rem", width: "60px", height: "60px" }} />
+      {/* 추천 박스 */}
+      <div
+        style={{
+          background: "#222",
+          margin: "1rem",
+          padding: "1rem",
+          borderRadius: "1rem",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <img
+          src="/images/01.png"
+          alt="main"
+          style={{
+            borderRadius: "0.5rem",
+            width: "60px",
+            height: "60px",
+          }}
+        />
         <div style={{ flex: 1, marginLeft: "1rem" }}>
-          <strong>{submittedQuery || "검색창에 입력하고 유사한 프로젝트를 찾아보세요"}</strong>
+          <strong>
+            {submittedQuery || "검색창에 입력하고 유사한 프로젝트를 찾아보세요"}
+          </strong>
           <div>
             <button
               style={{
@@ -175,21 +193,65 @@ const CirclePage = () => {
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 1rem", fontWeight: "bold" }}>
+      {/* 섹션 제목 */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "0 1rem",
+          fontWeight: "bold",
+        }}
+      >
         <span>{sectionTitle}</span>
         <FiChevronRight />
       </div>
 
-      <div style={{ maxHeight: "calc(100vh - 360px)", overflowY: "scroll", padding: "1rem" }}>
+      {/* 프로젝트 카드 리스트 */}
+      <div
+        style={{
+          maxHeight: "calc(100vh - 320px)",
+          overflowY: "scroll",
+          padding: "1rem",
+          paddingBottom: "6rem",
+        }}
+      >
         {projectsToShow.map((proj, idx) => (
-          <div key={idx} style={{ display: "flex", background: "#222", padding: "1rem", borderRadius: "1rem", marginBottom: "1rem" }}>
-            <img src={proj.image} alt={proj.title} style={{ width: 60, height: 60, borderRadius: "0.5rem", objectFit: "cover" }} />
+          <div
+            key={idx}
+            style={{
+              display: "flex",
+              background: "#222",
+              padding: "1rem",
+              borderRadius: "1rem",
+              marginBottom: "1rem",
+            }}
+          >
+            <img
+              src={proj.image}
+              alt={proj.title}
+              style={{
+                width: 60,
+                height: 60,
+                borderRadius: "0.5rem",
+                objectFit: "cover",
+              }}
+            />
             <div style={{ marginLeft: "1rem", flex: 1 }}>
               <div style={{ fontWeight: "bold" }}>{proj.title}</div>
               <div style={{ fontSize: "0.85rem", color: "#ccc" }}>{proj.description}</div>
               {searched && proj.similarity && (
-                <div style={{ marginTop: "0.5rem", display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.85rem" }}>
-                  <FiPlus size={14} /> 유사도 · {proj.similarity}
+                <div
+                  style={{
+                    marginTop: "0.5rem",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    fontSize: "0.85rem",
+                  }}
+                >
+                  <FiPlus size={14} />
+                  유사도 · {proj.similarity}
                 </div>
               )}
             </div>
@@ -198,13 +260,13 @@ const CirclePage = () => {
         ))}
       </div>
 
-      {/* 보라색 검색창 */}
+      {/* 하단 검색창 */}
       <div
         style={{
           position: "fixed",
-          bottom: "60px",
+          bottom: 0,
           left: 0,
-          width: "100%",
+          width: "98%",
           backgroundColor: "#a78bfa",
           color: "white",
           padding: "0.75rem 1rem",
@@ -212,7 +274,6 @@ const CirclePage = () => {
           alignItems: "center",
           borderTopLeftRadius: "1rem",
           borderTopRightRadius: "1rem",
-          zIndex: 1001,
         }}
       >
         <FiMenu />
@@ -234,14 +295,6 @@ const CirclePage = () => {
         />
         <FiSearch color="white" style={{ marginLeft: "0.5rem" }} />
       </div>
-
-      {/* 하단 바 */}
-      <BottomNavBar>
-        <NavBarIcon src="/images/home.png" alt="Home" onClick={() => navigate("/first")} />
-        <NavBarIcon src="/images/circle.png" alt="Circle" onClick={() => navigate("/circle")} />
-        <NavBarIcon src="/images/link.png" alt="Link" onClick={() => navigate("/team")} />
-        <NavBarIcon2 src="/images/profileicon.png" alt="Profile" onClick={() => navigate("/profile")} />
-      </BottomNavBar>
     </div>
   );
 };

@@ -14,7 +14,7 @@ import CirclePage from "./pages/CirclePage";
 import FirstPage from "./pages/FirstPage";
 import PostingPage from "./pages/posting";
 import ChatPage from "./pages/ChatPage";
-
+import TeamPage from "./pages/TeamPage";
 // atomize 기본 테마
 const theme = {
   colors: {
@@ -41,6 +41,7 @@ function App() {
           <Route path="/circle" element={<CirclePage />} />
           <Route path="/posting" element={<PostingPage />} />
           <Route path="/first" element={<FirstPage />} />
+          <Route path="/team" element={<TeamPage />} />
           <Route path="/chat" element={<ChatPage />} />
         </Routes>
       </Router>
