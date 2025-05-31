@@ -1,8 +1,13 @@
-//src/pages/ListPage/index.js
+// src/pages/ListPage/index.js
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+
+// ListPage 컴포넌트 시작
 
 function ListPage() {
+    const navigate = useNavigate();
+
     // Dummy data for projects based on the screenshot
     const projects = [
         {
@@ -10,30 +15,35 @@ function ListPage() {
             time: "3s",
             description: "바로 시작합시다!",
             showButton: true,
-            avatar: "/images/profile.png", // Replace with actual image paths
+            avatar: "/images/profile.png",
         },
         {
             name: "프로젝트 Silver",
             time: "10m",
             description: "구체적인건 이야기 해 드릴 수 없...",
-            showButton: false,
-            avatar: "/images/profile.png", // Replace with actual image paths
+            showButton: true,
+            avatar: "/images/profile.png",
         },
         {
             name: "프로젝트 Bronze",
             time: "20m",
             description: "당신의 쪽에 답변이 도착했습니다.\nㅣ 그러죠 뭐",
-            showButton: false,
-            avatar: "/images/profile.png", // Replace with actual image paths
+            showButton: true,
+            avatar: "/images/profile.png",
         },
         {
             name: "프로젝트 Iron",
             time: "10d",
             description: "당신의 쪽에 답변이 도착했습니다.\nㅣ ㅅㄱ",
-            showButton: false,
-            avatar: "/images/profile.png", // Replace with actual image paths
+            showButton: true,
+            avatar: "/images/profile.png",
         },
     ];
+
+    // '수락하기' 버튼 클릭 핸들러: 프로젝트 이름을 인자로 받음
+    const handleAcceptClick = (projectName) => {
+        navigate('/request-complete', { state: { projectName: projectName } }); // state로 projectName 전달
+    };
 
     return (
         <Container>
@@ -49,7 +59,7 @@ function ListPage() {
                     </HeaderTitle>
                 </HeaderLeft>
 
-                <ProfileImage src="/images/profile.png" alt="프로필 이미지" />
+                <ProfileImage src="/images/profile.png" alt="프로필 이미지" onClick={() => navigate('/profile')} />
             </Header>
 
             <ProjectListContainer>
@@ -63,7 +73,7 @@ function ListPage() {
                                 <ProjectTitle>{project.name}</ProjectTitle>
                                 <ProjectTime>{project.time}</ProjectTime>
                             </ProjectTitleTime>
-         
+
                             <ProjectDescription>{project.description.split('\n').map((line, i) => (
                                 <React.Fragment key={i}>
                                     {line}
@@ -71,24 +81,17 @@ function ListPage() {
                                 </React.Fragment>
                             ))}</ProjectDescription>
                         </ProjectInfo>
-                        {project.showButton && <StartButton>시작하기</StartButton>}
+                        {/* onClick에 project.name을 전달하도록 수정 */}
+                        {project.showButton && <AcceptButton onClick={() => handleAcceptClick(project.name)}>수락하기</AcceptButton>}
                     </ProjectItem>
                 ))}
             </ProjectListContainer>
 
-            {/* Bottom Navigation Bar */}
             <BottomNavBar>
-<<<<<<< HEAD
-                <NavBarIcon src="/images/home.png" alt="home" />
-                <NavBarIcon src="/images/circle.png" alt="circle" />
-                <NavBarIcon src="/images/link.png" alt="team" />
-                <NavBarIcon2 src="/images/profileicon.png" alt="Profile" />
-=======
-                <NavBarIcon src="/images/home.png" alt="first" />
-                <NavBarIcon src="/images/circle.png" alt="circle" />
-                <NavBarIcon src="/images/link.png" alt="Link" />
-                <NavBarIcon2 src="/images/profileicon.png" alt="profile" />
->>>>>>> 1cd68dd (Merge conflict resolved)
+                <NavBarIcon src="/images/home.png" alt="Home" onClick={() => navigate('/first')} />
+                <NavBarIcon src="/images/circle.png" alt="Circle" onClick={() => navigate('/circle')} />
+                <NavBarIcon src="/images/link.png" alt="Link" onClick={() => navigate('/team')} />
+                <NavBarIcon2 src="/images/profileicon.png" alt="Profile" onClick={() => navigate('/profile')} />
             </BottomNavBar>
         </Container>
     );
@@ -96,8 +99,7 @@ function ListPage() {
 
 export default ListPage;
 
-
-
+// styled-components 정의 (변경 없음)
 const Container = styled.div`
     background-color: black;
     color: white;
@@ -105,7 +107,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-bottom: 60px; 
+    padding-bottom: 60px;
     position: relative;
 `;
 
@@ -163,7 +165,7 @@ const ProfileImage = styled.img`
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solidrgb(148, 141, 206);
+    border: 2px solid #948dce;
     margin-right: 15px;
     cursor: pointer;
     margin-bottom: 7px;
@@ -209,7 +211,6 @@ const NavBarIcon2 = styled.img`
     }
 `;
 
-// New styled components for the project list layout
 const ProjectListContainer = styled.div`
     width: 100%;
     padding: 20px;
@@ -219,10 +220,9 @@ const ProjectListContainer = styled.div`
 const ProjectItem = styled.div`
     display: flex;
     align-items: center;
-
     padding: 15px 20px;
     border-bottom: 1px solid #333;
-    gap: 10x; 
+    gap: 10px;
 
     &:last-child {
         border-bottom: none;
@@ -267,7 +267,7 @@ const ProjectDescription = styled.span`
     color: #ccc;
 `;
 
-const StartButton = styled.button`
+const AcceptButton = styled.button`
     background-color: #948dce;
     color: black;
     font-weight: bold;
@@ -291,4 +291,3 @@ const RedDot = styled.div`
     border-radius: 50%;
     margin-right: 10px;
 `;
-
