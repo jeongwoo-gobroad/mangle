@@ -308,10 +308,10 @@ function ProfilePage() {
 
             {/* Bottom Navigation Bar Added */}
             <BottomNavBar>
-                <NavBarIcon src="/images/home.png" alt="Home" />
-                <NavBarIcon src="/images/circle.png" alt="Circle" />
-                <NavBarIcon src="/images/link.png" alt="Link" />
-                <NavBarIcon2 src="/images/profileicon.png" alt="Profile" />
+                <NavBarIcon src="/images/home.png" alt="first" />
+                <NavBarIcon src="/images/circle.png" alt="circle" />
+                <NavBarIcon src="/images/link.png" alt="link" />
+                <NavBarIcon2 src="/images/profileicon.png" alt="profile" />
             </BottomNavBar>
         </Container>
     );
