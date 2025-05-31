@@ -78,10 +78,17 @@ function ListPage() {
 
             {/* Bottom Navigation Bar */}
             <BottomNavBar>
+<<<<<<< HEAD
                 <NavBarIcon src="/images/home.png" alt="home" />
                 <NavBarIcon src="/images/circle.png" alt="circle" />
                 <NavBarIcon src="/images/link.png" alt="team" />
                 <NavBarIcon2 src="/images/profileicon.png" alt="Profile" />
+=======
+                <NavBarIcon src="/images/home.png" alt="first" />
+                <NavBarIcon src="/images/circle.png" alt="circle" />
+                <NavBarIcon src="/images/link.png" alt="Link" />
+                <NavBarIcon2 src="/images/profileicon.png" alt="profile" />
+>>>>>>> 1cd68dd (Merge conflict resolved)
             </BottomNavBar>
         </Container>
     );

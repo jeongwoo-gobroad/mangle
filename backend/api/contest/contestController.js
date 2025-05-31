@@ -76,7 +76,7 @@ const getRelatedWinningProjects = async (req, res) => {
 
     console.log('🚀 외부 유사도 추천 서버에 요청 보냄...');
     const response = await axios.post(
-      'http://jeongwoo-kim-web.myds.me:8000/simliarity_engine/',
+      'http://127.0.0.1:8000/simliarity_engine/',
       { target_idea: tagString }
     );
 

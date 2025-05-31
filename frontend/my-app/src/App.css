@@ -190,3 +190,26 @@ body {
 .text-center {
   text-align: center;
 }
+
+.nav-icon,
+.nav-icon2 {
+  width: 28px;
+  height: 28px;
+  margin: 0 16px;
+  object-fit: contain;
+  filter: grayscale(1) brightness(1.3); /* 연하게 표시 */
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: black;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid #333;
+  z-index: 100;
+}

@@ -5,8 +5,6 @@ import axios from "axios";
 
 function LoginPage() {
   const navigate = useNavigate();
-
-  // 상태 선언 순서는 가독성을 위해 유지
   const [userId, setUserId] = useState(""); 
   const [email, setEmail] = useState(""); 
   const [password, setPassword] = useState(""); 
@@ -18,16 +16,17 @@ function LoginPage() {
   const handleLogin = async () => {
     try {
       const response = await axios.post("http://jeongwoo-kim-web.myds.me:8080/auth/login", {
-        userId,   
-        email,    
-        password, 
+        userId,
+        email,
+        password,
       });
 
       const { token, user } = response.data;
 
+      // ✅ 대소문자 일치 중요!
       localStorage.setItem("token", token);
       localStorage.setItem("userId", user.userId);
-      localStorage.setItem("userName", user.name);
+      localStorage.setItem("username", user.name); // 'username'으로 저장해야 FirstPage에서 잘 보임
 
       navigate("/first");
     } catch (error) {
@@ -43,23 +42,18 @@ function LoginPage() {
         <Title>로그인</Title>
         <Subtitle>계정에 로그인하여 계속하세요.</Subtitle>
 
-        {/* ✅ 순서 1: 이메일 입력 칸 */}
         <Input
           type="email"
           placeholder="이메일 주소"
           value={email}
           onChange={handleChange(setEmail)}
         />
-
-        {/* ✅ 순서 2: 아이디 입력 칸 */}
         <Input
           type="text"
           placeholder="아이디"
           value={userId}
           onChange={handleChange(setUserId)}
         />
-
-        {/* ✅ 순서 3: 비밀번호 입력 칸 */}
         <Input
           type="password"
           placeholder="비밀번호"
@@ -84,7 +78,7 @@ function LoginPage() {
 
 export default LoginPage;
 
-// styled-components 부분은 변경 없이 유지됩니다.
+// ---------------- styled-components ----------------
 const Container = styled.div`
   background-color: black;
   color: white;
@@ -187,7 +181,7 @@ const RememberMe = styled.div`
   font-size: 14px;
   color: #aaa;
   width: 400px; 
-  justify-content:center; 
+  justify-content: center;
 
   input[type="checkbox"] {
     margin-right: 8px;
