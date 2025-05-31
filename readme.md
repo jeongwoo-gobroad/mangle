@@ -31,16 +31,13 @@ npm install
 **3-1. `.env` 파일 설정**
 ```bash
 # backend/.env 파일에 다음 정보 입력
-DB_HOST=your_database_host
-DB_PORT=your_database_port
-DB_USER=your_database_username
-DB_PASSWORD=your_database_password
-DB_NAME=your_database_name
-SERVER_PORT=your_server_port
+HOST="your_host_address"
+HTTP_PORT="your_server_port"
 ```
 
 **3-2. `config/config.json` 파일 설정**
 ```json
+// backend/config/config.json 파일에 다음 정보 입력력
 {
   "development": {
     "username": "your_database_username",
