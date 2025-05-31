@@ -10,11 +10,13 @@ import SigncompletePage from "./pages/SigncompletePage";
 import ProfilePage from "./pages/ProfilePage";
 
 // 기능 페이지들
+import RequestPage from './pages/RequestPage';
 import CirclePage from "./pages/CirclePage";
 import FirstPage from "./pages/FirstPage";
 import PostingPage from "./pages/posting";
 import ChatPage from "./pages/ChatPage";
 import TeamPage from "./pages/TeamPage";
+import ListPage from './pages/ListPage';
 // atomize 기본 테마
 const theme = {
   colors: {
@@ -43,6 +45,8 @@ function App() {
           <Route path="/first" element={<FirstPage />} />
           <Route path="/team" element={<TeamPage />} />
           <Route path="/chat" element={<ChatPage />} />
+          <Route path="/request-complete" element={<RequestPage />}>
+          <Route path="/list" element={<ListPage />} />   
         </Routes>
       </Router>
     </ThemeProvider>
