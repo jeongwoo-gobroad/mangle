@@ -91,7 +91,7 @@ const CirclePage = () => {
           title: item.target_text,
           description:
             item.how_similar?.similarity_points?.map((p) => p.similar_point_from_B).join(" · ") || "",
-           image: "/images/carbon.png",
+          image: "/images/carbon.png",
           similarity: item.similarity.toFixed(2),
         }));
         console.log("📦 변환된 프로젝트 데이터:", converted);
@@ -101,6 +101,7 @@ const CirclePage = () => {
         console.error("🔴 외부 유사도 서버 호출 오류:", err.message || err);
       });
   }, [submittedQuery]);
+
   // 🟢 초기 진입 또는 뒤로 가기 시: 내가 작성한 팀 모집글 불러오기
   const fetchMatchedTeamPosts = async () => {
     const token = localStorage.getItem("token");
@@ -234,6 +235,7 @@ const CirclePage = () => {
       </div>
 
       {/* 섹션 제목 */}
+      {/* "나에게 딱 맞는 팀 모집 글"을 클릭하면 ChatPage로 이동하도록 onClick 이벤트 추가 */}
       <div
         style={{
           display: "flex",
@@ -241,7 +243,9 @@ const CirclePage = () => {
           alignItems: "center",
           padding: "0 1rem",
           fontWeight: "bold",
+          cursor: "pointer", // 클릭 가능한 요소임을 시각적으로 나타냄
         }}
+        onClick={() => navigate("/chat")}
       >
         <span>{sectionTitle}</span>
         <FiChevronRight />
