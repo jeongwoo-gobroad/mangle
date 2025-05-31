@@ -235,7 +235,6 @@ const CirclePage = () => {
       </div>
 
       {/* 섹션 제목 */}
-      {/* "나에게 딱 맞는 팀 모집 글"을 클릭하면 ChatPage로 이동하도록 onClick 이벤트 추가 */}
       <div
         style={{
           display: "flex",
@@ -243,12 +242,10 @@ const CirclePage = () => {
           alignItems: "center",
           padding: "0 1rem",
           fontWeight: "bold",
-          cursor: "pointer", // 클릭 가능한 요소임을 시각적으로 나타냄
         }}
-        onClick={() => navigate("/chat")}
       >
         <span>{sectionTitle}</span>
-        <FiChevronRight />
+        <FiChevronRight /> {/* This chevron is for the section title, not individual items */}
       </div>
 
       {/* 프로젝트 카드 리스트 */}
@@ -260,6 +257,7 @@ const CirclePage = () => {
         }}
       >
         {projectsToShow.map((proj, idx) => (
+          // Add onClick to this div to navigate to ChatPage
           <div
             key={idx}
             style={{
@@ -268,7 +266,9 @@ const CirclePage = () => {
               padding: "1rem",
               borderRadius: "1rem",
               marginBottom: "1rem",
+              cursor: "pointer", // Indicate that each card is clickable
             }}
+            onClick={() => navigate("/chat")} // Navigate to ChatPage when a project card is clicked
           >
             <img
               src={proj.image}
@@ -298,7 +298,7 @@ const CirclePage = () => {
                 </div>
               )}
             </div>
-            <FiChevronRight size={20} />
+            <FiChevronRight size={20} /> {/* This chevron is part of the clickable card */}
           </div>
         ))}
       </div>
