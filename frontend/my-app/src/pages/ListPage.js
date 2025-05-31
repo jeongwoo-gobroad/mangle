@@ -78,9 +78,9 @@ function ListPage() {
 
             {/* Bottom Navigation Bar */}
             <BottomNavBar>
-                <NavBarIcon src="/images/home.png" alt="Home" />
-                <NavBarIcon src="/images/circle.png" alt="Circle" />
-                <NavBarIcon src="/images/link.png" alt="Link" />
+                <NavBarIcon src="/images/home.png" alt="home" />
+                <NavBarIcon src="/images/circle.png" alt="circle" />
+                <NavBarIcon src="/images/link.png" alt="team" />
                 <NavBarIcon2 src="/images/profileicon.png" alt="Profile" />
             </BottomNavBar>
         </Container>
