@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ThemeProvider, Div, Text, Image } from "atomize";
-import { FiSearch, FiGrid, FiMenu } from "react-icons/fi";
+import { FiSearch, FiBell, FiMenu } from "react-icons/fi";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +18,6 @@ const customTheme = {
 
 const BASE_URL = "http://jeongwoo-kim-web.myds.me:8080";
 
-// 하단 네비게이션 아이콘
 const NavBarIcon = ({ src, alt, onClick }) => (
   <img src={src} alt={alt} onClick={onClick} className="nav-icon" />
 );
@@ -83,7 +82,7 @@ function FirstPage() {
             </Div>
             <Div className="top-bar-right">
               <FiSearch color="white" size={20} style={{ marginRight: "1rem" }} />
-              <FiGrid color="white" size={20} style={{ marginRight: "1rem" }} />
+              <FiBell color="white" size={20} style={{ marginRight: "1rem" }} />
               <img
                 src="https://randomuser.me/api/portraits/women/44.jpg"
                 className="profile-img"
@@ -118,31 +117,26 @@ function FirstPage() {
             </Text>
             <Text textColor="gray300">@{userId || "unknown"}</Text>
 
-            {/* 진행중 버튼 */}
+            {/* 진행중 표시 */}
             <Div
-              d="flex"
-              align="center"
-              justify="center"
-              p="0.5rem 1rem"
-              rounded="circle"
+              d="inline-block"
+              p="0.4rem 1rem"
               m={{ t: "0.5rem" }}
+              textAlign="center"
               style={{
-                backgroundColor: "#FFCCCC",
-                color: "#000",
+                backgroundColor: "#FADADD",
+                color: "#000000",
                 fontWeight: "bold",
-                display: "inline-flex",
+                fontSize: "14px",
+                borderRadius: "9999px",
+                boxShadow: "0 1px 4px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <img
-                src="/images/progress-icon.png" // 아이콘 파일 위치
-                alt="진행중 아이콘"
-                style={{ width: "16px", height: "16px", marginRight: "8px" }}
-              />
               진행 중
             </Div>
           </Div>
 
-          {/* 콘테스트 타이틀 */}
+          {/* 콘테스트 섹션 */}
           <Div mt="2rem" className="text-center">
             <Text tag="h2" textSize="heading">Upcoming Contests</Text>
             {loading && <Text textColor="gray300">로딩 중...</Text>}

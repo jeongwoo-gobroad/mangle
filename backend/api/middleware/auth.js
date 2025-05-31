@@ -12,8 +12,15 @@ module.exports = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded; // ✅ 여기서 req.user에 user 정보 저장
-    next();              // ✅ 다음 컨트롤러로 진행
+
+    // ✅ 명시적으로 필요한 필드만 추출하여 저장
+    req.user = {
+      userId: decoded.userId,
+      role: decoded.role,
+      interests: decoded.interests // 예: ["AI", "스타트업"]
+    };
+
+    next(); // ✅ 다음 미들웨어 또는 라우터로 진행
   } catch (err) {
     return res.status(403).json({ error: '유효하지 않은 토큰입니다.' });
   }

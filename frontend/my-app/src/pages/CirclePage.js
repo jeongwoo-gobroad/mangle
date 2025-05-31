@@ -9,8 +9,48 @@ import {
   FiChevronRight,
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components"; // styled-components import
 
 const BASE_URL = "http://jeongwoo-kim-web.myds.me:8080";
+
+// styled-components 정의 (파일 상단에 위치)
+const BottomNavBar = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px; /* 하단 바 높이 */
+  background-color: #1a1a1a;
+  border-top: 1px solid #333;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;
+  box-sizing: border-box; /* padding을 포함하도록 설정 */
+`;
+
+const NavBarIcon = styled.img`
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  filter: invert(1);
+  opacity: 0.7;
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const NavBarIcon2 = styled.img`
+  width: 65px;
+  height: 65px;
+  margin-top: 10px;
+  cursor: pointer;
+  filter: invert(1);
+  opacity: 0.7;
+  &:hover {
+    opacity: 1;
+  }
+`;
 
 const CirclePage = () => {
   const navigate = useNavigate();
@@ -114,6 +154,7 @@ const CirclePage = () => {
         minHeight: "100vh",
         fontFamily: "sans-serif",
         position: "relative",
+        paddingBottom: "140px", // 하단 검색창(60px) + 하단 바(60px) + 여백(20px) = 140px
       }}
     >
       {/* 상단 바 */}
@@ -210,10 +251,9 @@ const CirclePage = () => {
       {/* 프로젝트 카드 리스트 */}
       <div
         style={{
-          maxHeight: "calc(100vh - 320px)",
+          maxHeight: "calc(100vh - 360px)", // 전체 높이에서 상단 요소 + 하단 검색창 + 하단 바 높이를 뺀 값
           overflowY: "scroll",
           padding: "1rem",
-          paddingBottom: "6rem",
         }}
       >
         {projectsToShow.map((proj, idx) => (
@@ -264,9 +304,9 @@ const CirclePage = () => {
       <div
         style={{
           position: "fixed",
-          bottom: 0,
+          bottom: "60px", // 하단 바 위에 위치 (하단 바 높이만큼 위로)
           left: 0,
-          width: "98%",
+          width: "100%", // 폭을 100%로 설정
           backgroundColor: "#a78bfa",
           color: "white",
           padding: "0.75rem 1rem",
@@ -274,6 +314,8 @@ const CirclePage = () => {
           alignItems: "center",
           borderTopLeftRadius: "1rem",
           borderTopRightRadius: "1rem",
+          zIndex: 1001,
+          boxSizing: "border-box", // padding이 너비에 포함되도록
         }}
       >
         <FiMenu />
@@ -295,6 +337,14 @@ const CirclePage = () => {
         />
         <FiSearch color="white" style={{ marginLeft: "0.5rem" }} />
       </div>
+
+      {/* !!! 여기에 하단 바 컴포넌트 추가 !!! */}
+      <BottomNavBar>
+        <NavBarIcon src="/images/home.png" alt="Home" onClick={() => navigate("/first")} />
+        <NavBarIcon src="/images/circle.png" alt="Circle" onClick={() => navigate("/circle")} />
+        <NavBarIcon src="/images/link.png" alt="Link" onClick={() => navigate("/team")} />
+        <NavBarIcon2 src="/images/profileicon.png" alt="Profile" onClick={() => navigate("/profile")} />
+      </BottomNavBar>
     </div>
   );
 };

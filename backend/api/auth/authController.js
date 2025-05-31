@@ -57,24 +57,33 @@ const login = async (req, res) => {
     // 🔍 프론트에서 보낸 로그인 정보
     console.log("📥 [login] 요청 바디:", req.body);
 
-    // 유저 존재 확인 (email + userId 조합으로 찾기)
-    const user = await User.findOne({ where: { email, userId } });
+    // ✅ 유저 존재 확인 (email + userId 조합으로 조회)
+    const user = await User.findOne({
+      where: { email, userId },
+      attributes: ['userId', 'name', 'email', 'password', 'role', 'interests'] // 🔥 핵심 추가
+    });
     if (!user) {
       return res.status(401).json({ error: '존재하지 않는 사용자입니다.' });
     }
 
-    // 비밀번호 검증
+    // ✅ 비밀번호 검증
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ error: '비밀번호가 일치하지 않습니다.' });
     }
+    // ✅ interests가 문자열이면 배열로 변환
+    const interests = typeof user.interests === 'string'
+      ? JSON.parse(user.interests)
+      : user.interests;
 
-    // JWT 토큰 발급
+    // ✅ JWT 토큰 발급: role, interests 포함
     const token = jwt.sign(
       {
         userId: user.userId,
         name: user.name,
         email: user.email,
+        role: user.role,           // 🔥 포함
+        interests: interests       // 🔥 포함
       },
       JWT_SECRET,
       { expiresIn: '3h' } // 유효기간 3시간
@@ -83,12 +92,15 @@ const login = async (req, res) => {
       // ✅ 로그인 성공 로그
     console.log("✅ [login] 로그인 성공:", user.userId);
 
+     // ✅ 응답 반환
     res.status(200).json({
       message: '로그인 성공',
       token,
       user: {
         userId: user.userId,
         name: user.name,
+        role: user.role,
+        interests: interests
       },
     });
   } catch (err) {
