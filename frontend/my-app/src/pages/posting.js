@@ -11,6 +11,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 
+const BASE_URL = "http://jeongwoo-kim-web.myds.me:8080";
+
 function PostingPage() {
   const navigate = useNavigate();
 
@@ -34,6 +36,47 @@ function PostingPage() {
   const hashtagOptions = [
     "AI", "스타트업", "관공서", "공모전", "지자체"
   ];
+
+  // 제출 핸들러 함수
+  const handleSubmit = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+
+      const formData = {
+        contestTitle: title,
+        desiredRoles: desiredRoles,
+        description: content,
+        hashtags: hashtags
+      };
+
+      console.log("🔥 프론트에서 서버로 보낼 데이터:", JSON.stringify(formData, null, 2));
+
+      const response = await fetch(`${BASE_URL}/teamposts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("팀 포스트 제출 실패");
+      }
+
+      const data = await response.json();
+      console.log("제출 성공:", data);
+      alert("프로젝트가 성공적으로 제출되었습니다!");
+      navigate("/"); // 메인 페이지로 이동
+    } catch (error) {
+      console.error("제출 실패:", error);
+      alert("제출 실패: " + (error.message || "서버 오류"));
+    }
+  };
 
   const handleClearTitle = () => setTitle("");
   const handleClearContent = () => setContent("");
@@ -378,16 +421,7 @@ function PostingPage() {
             fontSize: "0.9rem",
             cursor: "pointer",
           }}
-          onClick={() => {
-            const formData = {
-              contestTitle: title,
-              desiredRoles: desiredRoles,
-              description: content,
-              hashtags: hashtags
-            };
-            console.log("제출된 데이터:", formData);
-            alert("제출되었습니다");
-          }}
+          onClick={handleSubmit}
         >
           <FiStar size={16} style={{ marginRight: "0.4rem" }} />
           제출하기
